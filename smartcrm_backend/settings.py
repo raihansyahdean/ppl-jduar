@@ -116,9 +116,9 @@ USE_L10N = True
 USE_TZ = True
 
 # TODO : SEBELUM DEPLOY GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
-CSRF_TRUSTED_ORIGINS = ['ppl-smartcrm.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['https://ppl-smartcrm.herokuapp.com']
 
 CORS_ALLOW_CREDENTIALS = True
 
 # TODO : SEBELUM DEPLOY UNCOMMENT TERUS GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
-CORS_ORIGIN_WHITELIST = ['ppl-smartcrm.herokuapp.com']
+CORS_ORIGIN_WHITELIST = ['https://ppl-smartcrm.herokuapp.com']
