@@ -14,7 +14,7 @@ UnitTest:
     - python manage.py runserver 8000 &
   when: on_success
   script:
-    - coverage run --include='hello/*' manage.py test
+    - coverage run --include='hello/*' --omit='*/tests.py' manage.py test
     - coverage report -m
 
 DeploymentStaging:
