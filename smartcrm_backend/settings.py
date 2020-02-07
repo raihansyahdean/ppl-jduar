@@ -121,10 +121,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# TODO : SEBELUM DEPLOY GANTI VAR INI JADI ppl-smartcrm-frontend.herokuapp.com
+# TODO : SEBELUM DEPLOY GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
 CSRF_TRUSTED_ORIGINS = ['localhost:8080']
 
 CORS_ALLOW_CREDENTIALS = True
 
-# TODO : SEBELUM DEPLOY GANTI VAR INI JADI ppl-smartcrm-frontend.herokuapp.com
-CORS_ORIGIN_WHITELIST = ['localhost:8080']
+# TODO : SEBELUM DEPLOY UNCOMMENT TERUS GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
+# CORS_ORIGIN_WHITELIST = ['localhost:8080']
