@@ -1,5 +1,10 @@
 # JDUAR NVIDIA - Smart CRM Backend
 
+## Staging Pipeline Status
+[![Pipeline](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/badges/master/pipeline.svg)](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/commits/staging)
+[![Coverage](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/badges/master/coverage.svg)](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/commits/staging)
+
+## Master Pipeline Status
 [![Pipeline](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/badges/master/pipeline.svg)](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/commits/master)
 [![Coverage](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/badges/master/coverage.svg)](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/commits/master)
 
