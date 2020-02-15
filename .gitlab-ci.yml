@@ -48,4 +48,4 @@ DeploymentProduction:
     name: staging
     url: $HEROKU_APP_HOST_PROD
   only:
-    - staging
+    - master
