@@ -33,3 +33,20 @@ DeploymentStaging:
     url: $HEROKU_APP_HOST
   only:
     - staging
+
+DeploymentProduction:
+  image: ruby:2.4
+  stage: deploy
+  before_script:
+    - gem install dpl
+    - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+    - heroku config:set DISABLE_COLLECTSTATIC=1 --app $HEROKU_APPNAME --api-key=$HEROKU_APIKEY
+  script:
+    - dpl --provider=heroku --app=$HEROKU_APPNAME_PROD --api-key=$HEROKU_APIKEY
+    - export HEROKU_API_KEY=$HEROKU_APIKEY
+    - heroku run --app $HEROKU_APPNAME_PROD migrate
+  environment:
+    name: staging
+    url: $HEROKU_APP_HOST_PROD
+  only:
+    - staging
