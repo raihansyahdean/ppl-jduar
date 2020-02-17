@@ -16,6 +16,16 @@ UnitTest:
   script:
     - coverage run --include='hello/*' --omit='*/tests.py' manage.py test && coverage report -m
 
+SonarScanner:
+  image:addianto/sonar-scanner-cli:latest
+  stage: test
+  script:
+    - sonar-scanner
+      -Dsonar.host.url=https://pmpl.cs.ui.ac.id/sonarqube
+      -Dsonar.login=$SONARQUBE_TOKEN
+      -Dsonar.branch.name=$CI_COMMIT_REF_NAME
+
+
 DeploymentStaging:
   image: ruby:2.4
   stage: deploy
@@ -49,3 +59,5 @@ DeploymentProduction:
     url: $HEROKU_APP_HOST_PROD
   only:
     - master
+  when:
+    - manual
