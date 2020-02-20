@@ -15,7 +15,7 @@ UnitTest:
     - python manage.py runserver 8000 &
   when: on_success
   script:
-    - coverage run --include='hello/*' --omit='*/tests.py' manage.py test && coverage report -m && coverage xml
+    - coverage run --include='hello/*' --omit='*/tests.py' manage.py test && coverage report -m && coverage xml --include='hello/*' --omit='*/tests.py,smartcrm_backend/*,manage.py'
   artifacts:
     paths:
       - coverage.xml
