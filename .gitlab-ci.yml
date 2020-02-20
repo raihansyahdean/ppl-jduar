@@ -29,6 +29,9 @@ SonarScanner:
     - master
     - staging
     - development
+  artifacts:
+    paths:
+      - coverage.xml
 
 
 DeploymentStaging:
