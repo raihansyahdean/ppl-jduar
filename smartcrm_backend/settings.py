@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'q4tt+k=es^)rqb+90utglb6=^h1svoiqfr#5d*e26lb0sp$au3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["ppl-smartcrm-backend.herokuapp.com"]
 
