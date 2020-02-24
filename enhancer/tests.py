@@ -16,5 +16,7 @@ class EnhancerTest(TestCase):
 
         # Compress the same image
         new_image = compress(test_img_dir)
-        print(new_image)
+        new_size = sys.getsizeof(new_image)
+
+        self.assertTrue(ori_size > new_size)
         
