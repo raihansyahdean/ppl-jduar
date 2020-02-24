@@ -11,6 +11,16 @@
 ## Project Description
 Smart CRM (Customer Relationship Management) is a **progressive web app** (PWA) which can ease customer in membership registration. Smart CRM implements face recognition and face identification to identify if a customer is already registered as member or not.
 
+## Apps
+
+### Hello
+Simple hello world app.
+
+### Enhancer
+App to make image enhancements. Will include image compression and enhancing of images received from frontend.
+
+### Connor (TBD)
+Face recognition app to be developed.
 
 ## Development Team
 - Raihansyah Attallah Andrian (1706040196)
