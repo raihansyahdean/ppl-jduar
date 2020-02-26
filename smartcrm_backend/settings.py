@@ -23,9 +23,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'q4tt+k=es^)rqb+90utglb6=^h1svoiqfr#5d*e26lb0sp$au3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["ppl-smartcrm-backend.herokuapp.com"]
+ALLOWED_HOSTS = [
+    "ppl-smartcrm-backend.herokuapp.com",
+    "127.0.0.1"
+]
 
 
 # Application definition
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'hello',
+    'crossroads',
 ]
 
 MIDDLEWARE = [
@@ -125,9 +129,17 @@ USE_L10N = True
 USE_TZ = True
 
 # TODO : SEBELUM DEPLOY GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
-CSRF_TRUSTED_ORIGINS = ['https://ppl-smartcrm.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://ppl-smartcrm.herokuapp.com',
+    'https://dummy-smartcrm.herokuapp.com',
+    'http://127.0.0.1'
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
 # TODO : SEBELUM DEPLOY UNCOMMENT TERUS GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
-CORS_ORIGIN_WHITELIST = ['https://ppl-smartcrm.herokuapp.com']
+CORS_ORIGIN_WHITELIST = [
+    'https://ppl-smartcrm.herokuapp.com',
+    'https://dummy-smartcrm.herokuapp.com',
+    'http://127.0.0.1'
+]

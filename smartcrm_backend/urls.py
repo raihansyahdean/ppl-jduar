@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 import hello.urls as hello
+import crossroads.urls as crossroads
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/',include(hello)),
+    path('crossroads/',include(crossroads))
 ]
