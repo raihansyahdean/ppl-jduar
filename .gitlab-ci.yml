@@ -27,7 +27,7 @@ pylint:
     - pip install pylint pylint-exit
   script:
     - mkdir ./pylint
-    - pylint --output-format=text hello/views.py | tee ./pylint/pylint.txt || pylint-exit $?
+    - pylint --output-format=text enhancer | tee ./pylint/pylint.txt || pylint-exit $?
   artifacts:
     paths:
       - ./pylint/pylint.txt
