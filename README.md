@@ -16,6 +16,9 @@ Smart CRM (Customer Relationship Management) is a **progressive web app** (PWA) 
 ### Hello
 Simple hello world app.
 
+### Crossroads
+Main app to control program flow between frontend API and dummy of XQ's API.
+
 ### Enhancer
 App to make image enhancements. Will include image compression and enhancing of images received from frontend.
 
