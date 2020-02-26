@@ -19,6 +19,19 @@ UnitTest:
   artifacts:
     paths:
       - coverage.xml
+      - pylint-report.txt
+
+pylint:
+  image: python:3.6
+  stage: test
+  before_script:
+    - pip install pylint pylint-exit anybadge
+  script:
+    - mkdir ./pylint
+    - pylint --output-format=text hello/views.py | tee ./pylint/pylint.txt || pylint-exit $?
+  artifacts:
+    paths:
+      - ./pylint/pylint.txt
 
 SonarScanner:
   image: addianto/sonar-scanner-cli:latest
