@@ -28,7 +28,7 @@ pylint:
     - pip install pylint pylint-exit anybadge
   script:
     - mkdir ./pylint
-    - pylint --output-format=text hello/views.py crossroads/views.py | tee ./pylint/pylint.txt || pylint-exit $?
+    - pylint --output-format=text hello/views.py | tee ./pylint/pylint.txt || pylint-exit $?
     - PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' ./pylint/pylint.log)
     - echo "Pylint score is $PYLINT_SCORE"
   artifacts:
