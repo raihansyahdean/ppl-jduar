@@ -15,11 +15,12 @@ UnitTest:
     - python manage.py runserver 8000 &
   when: on_success
   script:
-    - coverage run --include='hello/*' --omit='*/tests.py' manage.py test && coverage report -m 
-    - coverage xml
+    - coverage run --include='hello/*' --omit='*/tests.py' manage.py test && coverage report -m && coverage xml
+    - pylint --output-format=text hello/views.py crossroads/views.py 2>&1 > pylint-report.txt
   artifacts:
     paths:
       - coverage.xml
+      - pylint-report.txt
 
 SonarScanner:
   image: addianto/sonar-scanner-cli:latest
