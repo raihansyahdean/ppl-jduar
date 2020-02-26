@@ -16,11 +16,23 @@ UnitTest:
   when: on_success
   script:
     - coverage run --include='hello/*' --omit='*/tests.py' manage.py test && coverage report -m && coverage xml
-    - pylint --output-format=text hello/views.py crossroads/views.py 2>&1 > pylint-report.txt
   artifacts:
     paths:
       - coverage.xml
       - pylint-report.txt
+
+pylint:
+  stage: test
+  before_script:
+    - pip install pylint pylint-exit anybadge
+  script:
+    - mkdir ./pylint
+    - pylint --output-format=text hello/views.py crossroads/views.py | tee ./pylint/pylint.txt || pylint-exit $?
+    - PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' ./pylint/pylint.log)
+    - echo "Pylint score is $PYLINT_SCORE"
+  artifacts:
+    paths:
+      - ./pylint/pylint.txt
 
 SonarScanner:
   image: addianto/sonar-scanner-cli:latest
