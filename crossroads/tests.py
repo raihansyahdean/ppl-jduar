@@ -29,5 +29,5 @@ payload = {
 # Create your tests here.
 class CrossroadTest(TestCase):
     def test_hello_world(self):
-        response = Client().post("")
+        response = Client().post("/crossroads/send/", data=payload)
         self.assertEqual(response.status_code,200)
