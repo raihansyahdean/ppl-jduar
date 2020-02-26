@@ -22,6 +22,7 @@ UnitTest:
       - pylint-report.txt
 
 pylint:
+  image: python:3.6
   stage: test
   before_script:
     - pip install pylint pylint-exit anybadge
