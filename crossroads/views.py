@@ -1,10 +1,9 @@
-from django.shortcuts import HttpResponse, render
-from django.views.decorators.csrf import csrf_protect
+import json
+from django.shortcuts import HttpResponse
 import django.middleware.csrf
 import requests
-import json
 
-payload_example = {
+PAYLOAD_EXAMPLE = {
     "registerPhoto": [
         {
             "position": "front",
@@ -31,8 +30,13 @@ payload_example = {
 
 
 def send_photos_to_dummy(request):
+    """
+    Send payload from backend to dummy
+    For further use of customer registration to XQ Informatics API
+    """
     csrf_token = django.middleware.csrf.get_token(request)
-    response = requests.post('http://dummy-smartcrm.herokuapp.com/payload/photos/', data=json.dumps(payload_example),
+    response = requests.post('http://dummy-smartcrm.herokuapp.com/payload/photos/',
+                             data=json.dumps(PAYLOAD_EXAMPLE),
                              headers={"CSRF-Token": csrf_token})
     print(response)
     return HttpResponse(response)
