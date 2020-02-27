@@ -15,7 +15,7 @@ UnitTest:
     - python manage.py runserver 8000 &
   when: on_success
   script:
-    - coverage run --include='hello/*' --omit='*/tests.py' manage.py test && coverage report -m && coverage xml
+    - coverage run --include='hello/*,enhancer/*' --omit='*/tests.py' manage.py test && coverage report -m && coverage xml
   artifacts:
     paths:
       - coverage.xml
@@ -27,7 +27,7 @@ pylint:
     - pip install pylint pylint-exit
   script:
     - mkdir ./pylint
-    - pylint --output-format=text hello/views.py | tee ./pylint/pylint.txt || pylint-exit $?
+    - pylint --output-format=text enhancer | tee ./pylint/pylint.txt || pylint-exit $?
   artifacts:
     paths:
       - ./pylint/pylint.txt
