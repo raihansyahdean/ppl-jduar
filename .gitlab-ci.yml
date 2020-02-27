@@ -41,11 +41,6 @@ SonarScanner:
       -Dsonar.host.url=https://pmpl.cs.ui.ac.id/sonarqube
       -Dsonar.login=$SONARQUBE_TOKEN
       -Dsonar.branch.name=$CI_COMMIT_REF_NAME
-  only:
-    - master
-    - staging
-    - development
-
 
 DeploymentStaging:
   image: ruby:2.4
