@@ -15,7 +15,8 @@ UnitTest:
     - python manage.py runserver 8000 &
   when: on_success
   script:
-    - coverage run --include='hello/*,crossroads/*' --omit='*/tests.py' manage.py test && coverage report -m && coverage xml
+    - coverage run --include='hello/*,crossroads/*,enhancer/*' --omit='*/tests.py' manage.py test && coverage report -m && coverage xml
+
   artifacts:
     paths:
       - coverage.xml
@@ -24,10 +25,11 @@ pylint:
   image: python:3.6
   stage: test
   before_script:
+    - pip install -r requirements.txt
     - pip install pylint pylint-exit
   script:
     - mkdir ./pylint
-    - pylint --output-format=text crossroads/views.py  | tee ./pylint/pylint.txt || pylint-exit $?
+    - pylint --output-format=text crossroads/views.py enhancer/compressor.py enhancer/tests.py | tee ./pylint/pylint.txt || pylint-exit $?
   artifacts:
     paths:
       - ./pylint/pylint.txt
@@ -40,11 +42,6 @@ SonarScanner:
       -Dsonar.host.url=https://pmpl.cs.ui.ac.id/sonarqube
       -Dsonar.login=$SONARQUBE_TOKEN
       -Dsonar.branch.name=$CI_COMMIT_REF_NAME
-  only:
-    - master
-    - staging
-    - development
-
 
 DeploymentStaging:
   image: ruby:2.4
