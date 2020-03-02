@@ -2,6 +2,9 @@
 Main module for image processing.
 """
 import os
+import base64
+from io import BytesIO
+from PIL import Image
 
 def delete_image(image_file_dir):
     """
@@ -14,20 +17,28 @@ def delete_image(image_file_dir):
         ret_msg = "The file " + image_file_dir + " does not exist."
         return ret_msg
 
-def data_to_image():
+def data_to_image(data, image_name):
     """
     Function to convert image data to image and save it.
     """
-    # lgsg di save ke images folder
-    pass
+    img = Image.open(BytesIO(base64.b64decode(data)))
+    img.save('images/' + image_name, 'JPEG')
+    return "Successful convert to images/" + image_name
 
-def image_to_data():
+def image_to_data(image_file_dir):
     """
     Function to convert an image to a data image.
     """
-    # buka dari compressed_images
-    # return text data
-    pass
+    try:
+        image = Image.open(image_file_dir)
+    except FileNotFoundError:
+        message = "File " + image_file_dir + " not found."
+        return message
+
+    buffered = BytesIO()
+    image.save(buffered, format="JPEG")
+    img_str = base64.b64encode(buffered.getvalue())
+    return img_str
 
 def save_to_json():
     """
