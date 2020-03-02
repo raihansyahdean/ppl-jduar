@@ -1,7 +1,11 @@
 import os
 
 def delete_image(image_file_dir):
-    pass
+    try:
+        os.remove(image_file_dir)
+    except FileNotFoundError:
+        ret_msg = "The file " + image_file_dir + " does not exist."
+        return ret_msg
 
 def data_to_image():
     # lgsg di save ke images folder
