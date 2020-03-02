@@ -1,9 +1,7 @@
 """
 Main module for compression.
 """
-from io import BytesIO
 from PIL import Image
-from django.core.files import File
 
 def compress(image_file_dir):
     """
@@ -16,4 +14,5 @@ def compress(image_file_dir):
         return ret_msg
 
     image_name = image_file_dir.split("/")[-1]
-    img.save("compressed_images/compressed_"+image_name,"JPEG",optimize=True,quality=65)
+    img.save("compressed_images/compressed_"+image_name, "JPEG", optimize=True, quality=65)
+    return "success"

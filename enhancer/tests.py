@@ -24,7 +24,6 @@ class EnhancerTest(TestCase):
         ori_size = sys.getsizeof(img_io)
 
         compress(test_img_dir)
-        
         new_image = Image.open("compressed_images/compressed_large.jpg")
         img_io2 = BytesIO()
         new_image.save(img_io2, format='JPEG')
@@ -45,7 +44,8 @@ class EnhancerTest(TestCase):
         Test to delete an image from a directory.
         """
         test_img_dir = "compressed_images/compressed_large.jpg"
-        delete_image(test_img_dir)
+        message = delete_image(test_img_dir)
+        self.assertEqual(message, "delete successful")
 
     def test_delete_image_does_not_exist(self):
         """
@@ -53,5 +53,6 @@ class EnhancerTest(TestCase):
         """
         test_img_dir = "compressed_images/compressed_large2.jpg"
         message = delete_image(test_img_dir)
-        self.assertEqual(message, "The file compressed_images/compressed_large2.jpg does not exist.")
+        self.assertEqual(message,
+                         "The file compressed_images/compressed_large2.jpg does not exist.")
         
