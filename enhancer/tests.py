@@ -6,6 +6,7 @@ from io import BytesIO
 from django.test import TestCase
 from PIL import Image
 from .compressor import compress
+from .image_processor import delete_image
 
 class EnhancerTest(TestCase):
     """
@@ -38,4 +39,19 @@ class EnhancerTest(TestCase):
         test_img_dir = "images/original2.jpg"
         message = compress(test_img_dir)
         self.assertEqual(message, "The file images/original2.jpg does not exist.")
+
+    def test_delete_image_successful(self):
+        """
+        Test to delete an image from a directory.
+        """
+        test_img_dir = "compressed_images/compressed_large.jpg"
+        delete_image(test_img_dir)
+
+    def test_delete_image_does_not_exist(self):
+        """
+        Test when image does not exists return error message.
+        """
+        test_img_dir = "compressed_images/compressed_large2.jpg"
+        message = delete_image(test_img_dir)
+        self.assertEqual(message, "The file compressed_images/compressed_large2.jpg does not exist.")
         
