@@ -79,7 +79,7 @@ def payload_isvalid(payload):
                 return False
             valid_position_flag[position] = True
             image = photos["image"]
-            if isinstance(image, str):
+            if not isinstance(image, str):
                 print("invalid type")
                 return False
 
