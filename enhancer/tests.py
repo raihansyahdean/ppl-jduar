@@ -16,14 +16,18 @@ class EnhancerTest(TestCase):
         Test to read an image from a directory and compare
         sizes after compression.
         """
-        test_img_dir = "images/original.jpg"
+        test_img_dir = "images/large.jpg"
         img = Image.open(test_img_dir)
         img_io = BytesIO()
         img.save(img_io, format='JPEG')
         ori_size = sys.getsizeof(img_io)
 
-        new_image = compress(test_img_dir)
-        new_size = sys.getsizeof(new_image)
+        compress(test_img_dir)
+        
+        new_image = Image.open("compressed_images/compressed_large.jpg")
+        img_io2 = BytesIO()
+        new_image.save(img_io2, format='JPEG')
+        new_size = sys.getsizeof(img_io2)
 
         self.assertTrue(ori_size > new_size)
 
