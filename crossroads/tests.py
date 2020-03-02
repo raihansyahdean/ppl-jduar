@@ -1,6 +1,5 @@
 import json
 from django.test import TestCase, Client
-from rest_framework.test import APIClient
 
 PAYLOAD = {
     "data": [
@@ -123,10 +122,9 @@ INVALID_KEY_PAYLOAD = {
     ]
 }
 
+
 # Create your tests here.
 class CrossroadTest(TestCase):
-    client = APIClient()
-
     def test_valid_payload(self):
         response = Client().post("/crossroads/send/", PAYLOAD, content_type="application/json")
         self.assertEqual(response.status_code, 200)
