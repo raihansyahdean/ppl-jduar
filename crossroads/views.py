@@ -61,7 +61,12 @@ def payload_isvalid(payload):
     :param payload: dictionary that will be dumped to json and sent as payload
     :return: True if valid. False otherwise
     """
-    valid_position_flag = {"front": False, "right": False, "left": False, "bottom": False, "top": False}
+    valid_position_flag = {
+        "front": False,
+        "right": False,
+        "left": False,
+        "bottom": False,
+        "top": False}
     try:
         data = payload["data"]
 
@@ -72,10 +77,9 @@ def payload_isvalid(payload):
             if valid_position_flag[position]:
                 print("invalid flag")
                 return False
-            else:
-                valid_position_flag[position] = True
+            valid_position_flag[position] = True
             image = photos["image"]
-            if type(image) != str:
+            if isinstance(image, str):
                 print("invalid type")
                 return False
 
