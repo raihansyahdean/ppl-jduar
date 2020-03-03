@@ -56,6 +56,7 @@ def data_to_image(data, image_name):
 def image_to_data(image_file_dir):
     """
     Function to convert an image to a data image.
+    Returns base64 string of image.
     """
     try:
         image = Image.open(image_file_dir)
