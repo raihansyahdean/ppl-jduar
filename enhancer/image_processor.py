@@ -7,9 +7,10 @@ from io import BytesIO
 from PIL import Image
 from .compressor import compress
 
-image_names = ["image_front.jpg", "image_right.jpg", "image_left.jpg", "image_bottom.jpg", "image_top.jpg"]
+IMAGE_NAMES = ["image_front.jpg", "image_right.jpg",
+               "image_left.jpg", "image_bottom.jpg", "image_top.jpg"]
 
-payload = {
+PAYLOAD = {
     "data": [
         {
             "position": "front",
@@ -76,12 +77,12 @@ def create_register_payload(datas):
     if len(datas) != 5:
         err_msg = "Data length must be 5."
         raise Exception(err_msg)
-    
+
     for i in range(5):
-        data_to_image(datas[i], image_names[i])
-        compress("images/" + image_names[i])
-        delete_image("images/" + image_names[i])
-        compressed_data_str = image_to_data("compressed_images/compressed_" + image_names[i])
-        payload["data"][i]["image"] = compressed_data_str
-    
-    return payload
+        data_to_image(datas[i], IMAGE_NAMES[i])
+        compress("images/" + IMAGE_NAMES[i])
+        delete_image("images/" + IMAGE_NAMES[i])
+        compressed_data_str = image_to_data("compressed_images/compressed_" + IMAGE_NAMES[i])
+        PAYLOAD["data"][i]["image"] = compressed_data_str
+
+    return PAYLOAD
