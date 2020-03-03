@@ -5,6 +5,35 @@ import os
 import base64
 from io import BytesIO
 from PIL import Image
+from .compressor import compress
+
+image_names = ["image_front.jpg", "image_right.jpg", "image_left.jpg", "image_bottom.jpg", "image_top.jpg"]
+
+payload = {
+    "data": [
+        {
+            "position": "front",
+            "image": ""
+        },
+        {
+            "position": "right",
+            "image": ""
+        },
+        {
+            "position": "left",
+            "image": ""
+        },
+        {
+            "position": "bottom",
+            "image": ""
+        },
+        {
+            "position": "top",
+            "image": ""
+        }
+    ]
+}
+
 
 def delete_image(image_file_dir):
     """
@@ -12,10 +41,9 @@ def delete_image(image_file_dir):
     """
     try:
         os.remove(image_file_dir)
-        return "delete successful"
     except FileNotFoundError:
-        ret_msg = "The file " + image_file_dir + " does not exist."
-        return ret_msg
+        err_msg = "The file " + image_file_dir + " does not exist."
+        raise Exception(err_msg)
 
 def data_to_image(data, image_name):
     """
@@ -23,7 +51,6 @@ def data_to_image(data, image_name):
     """
     img = Image.open(BytesIO(base64.b64decode(data)))
     img.save('images/' + image_name, 'JPEG')
-    return "Successful convert to images/" + image_name
 
 def image_to_data(image_file_dir):
     """
@@ -32,18 +59,29 @@ def image_to_data(image_file_dir):
     try:
         image = Image.open(image_file_dir)
     except FileNotFoundError:
-        message = "File " + image_file_dir + " not found."
-        return message
+        err_msg = "File " + image_file_dir + " not found."
+        raise Exception(err_msg)
 
     buffered = BytesIO()
     image.save(buffered, format="JPEG")
     img_str = base64.b64encode(buffered.getvalue())
     return img_str
 
-def save_to_json():
+def create_register_payload(datas):
     """
     Function to save images to json format ready to be sent.
+    Datas is an array with 5 original images in base64 format.
+    Returns complete payload.
     """
-    # ngambil data images dari
-    # nge format json
-    pass
+    if len(datas) != 5:
+        err_msg = "Data length must be 5."
+        raise Exception(err_msg)
+    
+    for i in range(5):
+        data_to_image(datas[i], image_names[i])
+        compress("images/" + image_names[i])
+        delete_image("images/" + image_names[i])
+        compressed_data_str = image_to_data("compressed_images/compressed_" + image_names[i])
+        payload["data"][i]["image"] = compressed_data_str
+    
+    return payload
