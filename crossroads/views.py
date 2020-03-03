@@ -47,7 +47,7 @@ def send_photos_to_dummy(request):
         return JsonResponse(json.loads(json.dumps(INVALID_PAYLOAD_RESPONSE)), status=400)
 
     csrf_token = django.middleware.csrf.get_token(request)
-    response = requests.post('http://dummy-smartcrm.herokuapp.com/payload/photos/',
+    response = requests.post('https://dummy-smartcrm.herokuapp.com/payload/photos/',
                              data=json.dumps(request_payload),
                              headers={"CSRF-Token": csrf_token})
 
