@@ -6,27 +6,29 @@ from django.http import JsonResponse
 import django.middleware.csrf
 import requests
 
+IMAGE_TEMPLATE = "<image>"
+
 PAYLOAD_TEMPLATE = {
     "data": [
         {
             "position": "front",
-            "image": "<image>"
+            "image": IMAGE_TEMPLATE
         },
         {
             "position": "right",
-            "image": "<image>"
+            "image": IMAGE_TEMPLATE
         },
         {
             "position": "left",
-            "image": "<image>"
+            "image": IMAGE_TEMPLATE
         },
         {
             "position": "bottom",
-            "image": "<image>"
+            "image": IMAGE_TEMPLATE
         },
         {
             "position": "top",
-            "image": "<image>"
+            "image": IMAGE_TEMPLATE
         }
     ]
 }
