@@ -125,30 +125,38 @@ INVALID_KEY_PAYLOAD = {
 
 # Create your tests here.
 class CrossroadTest(TestCase):
-    def test_valid_payload(self):
+    def test_valid_payload_to_dummy(self):
         response = Client().post("/crossroads/send/", PAYLOAD, content_type="application/json")
         self.assertEqual(response.status_code, 200)
 
-    def test_invalid_payload(self):
+    def test_invalid_payload_to_dummy(self):
         response = Client().post("/crossroads/send/", INVALID_PAYLOAD, content_type="application/json")
         data = json.loads(response.content)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data["message"], "Invalid Payload")
 
-    def test_invalid_type_payload(self):
+    def test_invalid_type_payload_to_dummy(self):
         response = Client().post("/crossroads/send/", INVALID_TYPE_PAYLOAD, content_type="application/json")
         data = json.loads(response.content)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data["message"], "Invalid Payload")
 
-    def test_invalid_key_payload(self):
+    def test_invalid_key_payload_to_dummy(self):
         response = Client().post("/crossroads/send/", INVALID_KEY_PAYLOAD, content_type="application/json")
         data = json.loads(response.content)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data["message"], "Invalid Payload")
 
-    def test_incomplete_payload(self):
+    def test_incomplete_payload_to_dummy(self):
         response = Client().post("/crossroads/send/", INCOMPLETE_PAYLOAD, content_type="application/json")
         data = json.loads(response.content)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data["message"], "Invalid Payload")
+
+    def test_receive_from_fe(self):
+        response = Client().post("/crossroads/regist/", PAYLOAD, content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+
+    def test_invalid_request_from_fe(self):
+        response = Client().get("/crossroads/regist/")
+        self.assertEqual(response.status_code, 400)
