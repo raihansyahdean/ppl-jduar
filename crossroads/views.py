@@ -5,10 +5,27 @@ import json
 from django.http import JsonResponse
 import django.middleware.csrf
 import requests
+from django.views.decorators.csrf import csrf_exempt
 
 import crossroads.validator as validator
 
 INVALID_PAYLOAD_RESPONSE = {"status_code": 400, "message": "Invalid Payload"}
+INVALID_REQUEST_RESPONSE = {"status_code": 400, "message": "Invalid Request"}
+
+
+@csrf_exempt
+def receive_photos_from_fe(request):
+    """
+    Receive photos from fe after registration
+    :param request:
+    :return:
+    """
+    if request.method == "POST":
+        body_unicode = request.body.decode('utf8')
+        request_payload = json.loads(body_unicode)
+        return JsonResponse(request_payload)
+    else:
+        return JsonResponse(json.loads(json.dumps(INVALID_REQUEST_RESPONSE)), status=400)
 
 
 def send_photos_to_dummy(request):
