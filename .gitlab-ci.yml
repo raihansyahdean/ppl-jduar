@@ -6,6 +6,9 @@ stages:
 UnitTest:
   image: python:3.6
   stage: test
+  variables:
+    URL_FE: $FE_STAGING
+    URL_BE: $HEROKU_APP_HOST
   before_script:
     - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
