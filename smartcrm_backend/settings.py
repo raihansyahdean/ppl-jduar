@@ -25,7 +25,8 @@ SECRET_KEY = 'q4tt+k=es^)rqb+90utglb6=^h1svoiqfr#5d*e26lb0sp$au3'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    str(os.getenv('URL_BE')),
+    "ppl-smartcrm-backend.herokuapp.com",
+    "smart-crm-backend.herokuapp.com",
     "127.0.0.1"
 ]
 
