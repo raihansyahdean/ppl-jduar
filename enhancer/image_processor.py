@@ -84,6 +84,7 @@ def create_register_payload(datas):
         compress("images/" + IMAGE_NAMES[i])
         delete_image("images/" + IMAGE_NAMES[i])
         compressed_data_str = image_to_data("compressed_images/compressed_" + IMAGE_NAMES[i])
+        compressed_data_str = str(compressed_data_str[2:])
         PAYLOAD["data"][i]["image"] = compressed_data_str
 
     return PAYLOAD

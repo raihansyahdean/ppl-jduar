@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "ppl-smartcrm-backend.herokuapp.com",
-    "127.0.0.1"
+    "127.0.0.1",
+    "localhost",
 ]
 
 
@@ -132,14 +133,18 @@ USE_TZ = True
 CSRF_TRUSTED_ORIGINS = [
     'https://ppl-smartcrm.herokuapp.com',
     'https://dummy-smartcrm.herokuapp.com',
-    'http://127.0.0.1'
+    'http://127.0.0.1',
+    'http://localhost:8080',
+    'http://192.168.0.103'
 ]
 
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = False
 
 # TODO : SEBELUM DEPLOY UNCOMMENT TERUS GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
 CORS_ORIGIN_WHITELIST = [
     'https://ppl-smartcrm.herokuapp.com',
     'https://dummy-smartcrm.herokuapp.com',
-    'http://127.0.0.1'
+    'http://127.0.0.1',
+    'http://localhost:8080',
+    'http://192.168.0.103'
 ]
