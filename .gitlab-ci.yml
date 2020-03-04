@@ -6,14 +6,12 @@ stages:
 UnitTest:
   image: python:3.6
   stage: test
-  variables:
-    URL_FE: $FE_STAGING
-    URL_BE: $HEROKU_APP_HOST
   before_script:
+    - echo "SECRET_KEY=$SECRET_KEY" > .env
     - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
     - pip install -r requirements.txt
-    - python manage.py makemigrations
+    - python manage.py makemigrations --settings=smartcrm_backend.settings.development
     - python manage.py migrate
     - python manage.py runserver 8000 &
   when: on_success
@@ -49,10 +47,8 @@ SonarScanner:
 DeploymentStaging:
   image: ruby:2.4
   stage: deploy
-  variables:
-    URL_FE: $FE_STAGING
-    URL_BE: $HEROKU_APP_HOST
   before_script:
+    - echo "SECRET_KEY=$SECRET_KEY" > .env
     - gem install dpl
     - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
     - heroku config:set DISABLE_COLLECTSTATIC=1 --app $HEROKU_APPNAME --api-key=$HEROKU_APIKEY
@@ -69,10 +65,8 @@ DeploymentStaging:
 DeploymentProduction:
   image: ruby:2.4
   stage: deploy
-  variables:
-    URL_FE: $FE_PROD
-    URL_BE: $HEROKU_APP_HOST_PROD
   before_script:
+    - echo "SECRET_KEY=$SECRET_KEY" > .env
     - gem install dpl
     - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
     - heroku config:set DISABLE_COLLECTSTATIC=1 --app $HEROKU_APPNAME_PROD --api-key=$HEROKU_APIKEY
