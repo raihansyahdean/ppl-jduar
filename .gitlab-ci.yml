@@ -46,6 +46,9 @@ SonarScanner:
 DeploymentStaging:
   image: ruby:2.4
   stage: deploy
+  variables:
+    URL_FE: $FE_STAGING
+    URL_BE: $HEROKU_APP_HOST
   before_script:
     - gem install dpl
     - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
@@ -63,16 +66,19 @@ DeploymentStaging:
 DeploymentProduction:
   image: ruby:2.4
   stage: deploy
+  variables:
+    URL_FE: $FE_PROD
+    URL_BE: $HEROKU_APP_HOST_PROD
   before_script:
     - gem install dpl
     - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
-    - heroku config:set DISABLE_COLLECTSTATIC=1 --app $HEROKU_APPNAME --api-key=$HEROKU_APIKEY
+    - heroku config:set DISABLE_COLLECTSTATIC=1 --app $HEROKU_APPNAME_PROD --api-key=$HEROKU_APIKEY
   script:
     - dpl --provider=heroku --app=$HEROKU_APPNAME_PROD --api-key=$HEROKU_APIKEY
     - export HEROKU_API_KEY=$HEROKU_APIKEY
     - heroku run --app $HEROKU_APPNAME_PROD migrate
   environment:
-    name: staging
+    name: production
     url: $HEROKU_APP_HOST_PROD
   only:
     - master
