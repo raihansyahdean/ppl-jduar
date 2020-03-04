@@ -7,15 +7,15 @@ UnitTest:
   image: python:3.6
   stage: test
   before_script:
-    - echo "SECRET_KEY=$SECRET_KEY" > .env
     - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
     - pip install -r requirements.txt
     - python manage.py makemigrations --settings=smartcrm_backend.settings.development
-    - python manage.py migrate
-    - python manage.py runserver 8000 &
+    - python manage.py migrate --settings=smartcrm_backend.settings.development
+    - python manage.py runserver 8000 --settings=smartcrm_backend.settings.development &
   when: on_success
   script:
+    - echo "SECRET_KEY=$SECRET_KEY" > .env
     - coverage run --include='hello/*,crossroads/*,enhancer/*' --omit='*/tests.py' manage.py test && coverage report -m && coverage xml
 
   artifacts:
@@ -48,11 +48,11 @@ DeploymentStaging:
   image: ruby:2.4
   stage: deploy
   before_script:
-    - echo "SECRET_KEY=$SECRET_KEY" > .env
     - gem install dpl
     - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
     - heroku config:set DISABLE_COLLECTSTATIC=1 --app $HEROKU_APPNAME --api-key=$HEROKU_APIKEY
   script:
+    - echo "SECRET_KEY=$SECRET_KEY" > .env
     - dpl --provider=heroku --app=$HEROKU_APPNAME --api-key=$HEROKU_APIKEY
     - export HEROKU_API_KEY=$HEROKU_APIKEY
     - heroku run --app $HEROKU_APPNAME migrate
@@ -66,11 +66,11 @@ DeploymentProduction:
   image: ruby:2.4
   stage: deploy
   before_script:
-    - echo "SECRET_KEY=$SECRET_KEY" > .env
     - gem install dpl
     - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
     - heroku config:set DISABLE_COLLECTSTATIC=1 --app $HEROKU_APPNAME_PROD --api-key=$HEROKU_APIKEY
   script:
+    - echo "SECRET_KEY=$SECRET_KEY" > .env
     - dpl --provider=heroku --app=$HEROKU_APPNAME_PROD --api-key=$HEROKU_APIKEY
     - export HEROKU_API_KEY=$HEROKU_APIKEY
     - heroku run --app $HEROKU_APPNAME_PROD migrate
