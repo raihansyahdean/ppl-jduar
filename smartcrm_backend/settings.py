@@ -25,7 +25,7 @@ SECRET_KEY = 'q4tt+k=es^)rqb+90utglb6=^h1svoiqfr#5d*e26lb0sp$au3'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    os.getenv('URL_BE'),
+    str(os.getenv('URL_BE')),
     "127.0.0.1"
 ]
 
@@ -125,7 +125,7 @@ USE_TZ = True
 
 # TODO : SEBELUM DEPLOY GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
 CSRF_TRUSTED_ORIGINS = [
-    os.getenv('URL_FE'),
+    str(os.getenv('URL_FE')),
     'https://dummy-smartcrm.herokuapp.com',
     'http://127.0.0.1'
 ]
@@ -134,7 +134,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 # TODO : SEBELUM DEPLOY UNCOMMENT TERUS GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
 CORS_ORIGIN_WHITELIST = [
-    os.getenv('URL_FE'),
+    str(os.getenv('URL_FE')),
     'https://dummy-smartcrm.herokuapp.com',
     'http://127.0.0.1'
 ]
