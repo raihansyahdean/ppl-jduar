@@ -127,6 +127,7 @@ USE_TZ = True
 # TODO : SEBELUM DEPLOY GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
 CSRF_TRUSTED_ORIGINS = [
     'https://ppl-smartcrm.herokuapp.com',
+    'https://smart-crm.herokuapp.com',
     'https://dummy-smartcrm.herokuapp.com',
     'http://127.0.0.1'
 ]
@@ -136,6 +137,7 @@ CORS_ALLOW_CREDENTIALS = True
 # TODO : SEBELUM DEPLOY UNCOMMENT TERUS GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
 CORS_ORIGIN_WHITELIST = [
     'https://ppl-smartcrm.herokuapp.com',
+    'https://smart-crm.herokuapp.com',
     'https://dummy-smartcrm.herokuapp.com',
     'http://127.0.0.1'
 ]
