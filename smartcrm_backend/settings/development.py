@@ -130,7 +130,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://dummy-smartcrm.herokuapp.com',
     'http://127.0.0.1',
     'http://localhost:8080',
-    'http://192.168.0.103'
+    'http://localhost:8000'
 ]
 
 CORS_ALLOW_CREDENTIALS = False
@@ -141,5 +141,5 @@ CORS_ORIGIN_WHITELIST = [
     'https://dummy-smartcrm.herokuapp.com',
     'http://127.0.0.1',
     'http://localhost:8080',
-    'http://192.168.0.103'
+    'http://localhost:8000'
 ]
