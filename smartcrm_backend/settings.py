@@ -19,14 +19,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'q4tt+k=es^)rqb+90utglb6=^h1svoiqfr#5d*e26lb0sp$au3'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "smart-crm-backend.herokuapp.com",
-    "smart-crm-backend.herokuapp.com",
+    str(os.getenv('APP_HOST')),
     "127.0.0.1"
 ]
 
@@ -126,7 +125,7 @@ USE_TZ = True
 
 # TODO : SEBELUM DEPLOY GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
 CSRF_TRUSTED_ORIGINS = [
-    'https://smart-crm.herokuapp.com',
+    'https://' + str(os.getenv('FE_HOST')),
     'https://dummy-smartcrm.herokuapp.com',
     'http://127.0.0.1'
 ]
@@ -135,7 +134,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 # TODO : SEBELUM DEPLOY UNCOMMENT TERUS GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
 CORS_ORIGIN_WHITELIST = [
-    'https://smart-crm.herokuapp.com',
+    'https://' + str(os.getenv('FE_HOST')),
     'https://dummy-smartcrm.herokuapp.com',
     'http://127.0.0.1'
 ]
