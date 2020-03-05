@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -26,11 +25,10 @@ SECRET_KEY = 'q4tt+k=es^)rqb+90utglb6=^h1svoiqfr#5d*e26lb0sp$au3'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "ppl-smartcrm-backend.herokuapp.com",
-    "127.0.0.1",
-    "localhost",
+    "smart-crm-backend.herokuapp.com",
+    "smart-crm-backend.herokuapp.com",
+    "127.0.0.1"
 ]
-
 
 # Application definition
 
@@ -77,17 +75,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'smartcrm_backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, '../../db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -115,7 +111,6 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -131,20 +126,16 @@ USE_TZ = True
 
 # TODO : SEBELUM DEPLOY GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
 CSRF_TRUSTED_ORIGINS = [
-    'https://ppl-smartcrm.herokuapp.com',
+    'https://smart-crm.herokuapp.com',
     'https://dummy-smartcrm.herokuapp.com',
-    'http://127.0.0.1',
-    'http://localhost:8080',
-    'http://192.168.0.103'
+    'http://127.0.0.1'
 ]
 
-CORS_ALLOW_CREDENTIALS = False
+CORS_ALLOW_CREDENTIALS = True
 
 # TODO : SEBELUM DEPLOY UNCOMMENT TERUS GANTI VAR INI JADI ppl-smartcrm.herokuapp.com
 CORS_ORIGIN_WHITELIST = [
-    'https://ppl-smartcrm.herokuapp.com',
+    'https://smart-crm.herokuapp.com',
     'https://dummy-smartcrm.herokuapp.com',
-    'http://127.0.0.1',
-    'http://localhost:8080',
-    'http://192.168.0.103'
+    'http://127.0.0.1'
 ]

@@ -8,7 +8,7 @@ from PIL import Image
 from .compressor import compress
 
 IMAGE_NAMES = ["image_front.jpg", "image_right.jpg",
-               "image_left.jpg", "image_bottom.jpg", "image_top.jpg"]
+               "image_left.jpg", "image_top.jpg", "image_bottom.jpg"]
 
 PAYLOAD = {
     "data": [
@@ -25,11 +25,11 @@ PAYLOAD = {
             "image": ""
         },
         {
-            "position": "bottom",
+            "position": "top",
             "image": ""
         },
         {
-            "position": "top",
+            "position": "bottom",
             "image": ""
         }
     ]

@@ -8,6 +8,10 @@
 [![Pipeline](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/badges/master/pipeline.svg)](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/commits/master)
 [![coverage report](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/badges/master/coverage.svg)](https://gitlab.cs.ui.ac.id/ppl-fasilkom-ui/2020/jduar-nvidia-smart-crm/commits/master)
 
+## Links of Project
+Staging : https://ppl-smartcrm-backend.herokuapp.com
+Production : httpsZ://smart-crm-backend.herokuapp.com
+
 ## Project Description
 Smart CRM (Customer Relationship Management) is a **progressive web app** (PWA) which can ease customer in membership registration. Smart CRM implements face recognition and face identification to identify if a customer is already registered as member or not.
 
