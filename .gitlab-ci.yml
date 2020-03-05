@@ -10,13 +10,13 @@ UnitTest:
     - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
     - pip install -r requirements.txt
-    - python manage.py makemigrations --settings=smartcrm_backend.settings.development
-    - python manage.py migrate --settings=smartcrm_backend.settings.development
-    - python manage.py runserver 8000 --settings=smartcrm_backend.settings.development &
+    - python manage.py makemigrations
+    - python manage.py migrate
+    - python manage.py runserver 8000 &
   when: on_success
   script:
     - echo "SECRET_KEY=$SECRET_KEY" > .env
-    - coverage run --include='hello/*,crossroads/*,enhancer/*' --omit='*/tests.py' manage.py test --settings=smartcrm_backend.settings.development && coverage report -m && coverage xml
+    - coverage run --include='hello/*,crossroads/*,enhancer/*' --omit='*/tests.py' manage.py test && coverage report -m && coverage xml
 
   artifacts:
     paths:
