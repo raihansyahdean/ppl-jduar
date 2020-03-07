@@ -8,7 +8,7 @@ Smart CRM (Customer Relationship Management) is a progressive web app (PWA) whic
 ## Projects URL
 Staging : https://ppl-smartcrm-backend.herokuapp.com
 
-Production : httpsZ://smart-crm-backend.herokuapp.com
+Production : https://smart-crm-backend.herokuapp.com
 
 
 ## Getting Started
@@ -24,6 +24,7 @@ These instructions will get you a copy of the project up and running on your loc
 A step by step series to get a development env running in your local PC
 
 * Init git using :
+
 (you must install git first in prerequisites)
 ```
 git init
