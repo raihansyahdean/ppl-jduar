@@ -26,7 +26,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     str(os.getenv('APP_HOST')),
-    "127.0.0.1"
+    "127.0.0.1",
+    "localhost"
 ]
 
 # Application definition
@@ -127,7 +128,8 @@ USE_TZ = True
 CSRF_TRUSTED_ORIGINS = [
     'https://' + str(os.getenv('FE_HOST')),
     'https://dummy-smartcrm.herokuapp.com',
-    'http://127.0.0.1'
+    'http://127.0.0.1',
+    "http://localhost:8080"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -136,5 +138,6 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
     'https://' + str(os.getenv('FE_HOST')),
     'https://dummy-smartcrm.herokuapp.com',
-    'http://127.0.0.1'
+    'http://127.0.0.1',
+    "http://localhost:8080"
 ]
