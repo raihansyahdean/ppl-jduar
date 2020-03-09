@@ -136,17 +136,14 @@ INVALID_KEY_PAYLOAD = {
     ]
 }
 
-
-# Create your tests here.
 class CrossroadTest(TestCase):
-
+    """
+    run test for crossroads app
+    """
     def setUp(self):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
 
-    """
-    Main crossroads test class.
-    """
     def test_valid_payload_to_dummy(self):
         """
         Test when payload sent is valid.
@@ -204,7 +201,8 @@ class CrossroadTest(TestCase):
     #     """
     #     Test when receive post from frontend.
     #     """
-    #     response = Client().post("/crossroads/regist/", PAYLOAD_FROM_FE, content_type="application/json")
+    #     response = Client().post("/crossroads/regist/",\
+    #  PAYLOAD_FROM_FE, content_type="application/json")
     #     self.assertEqual(response.status_code, 200)
 
     def test_invalid_request_from_fe(self):

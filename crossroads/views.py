@@ -43,7 +43,6 @@ def send_photos_to_dummy(request, request_payload):
     Send payload from backend to dummy
     For further use of customer registration to XQ Informatics API
     """
-    
     if not validator.payload_isvalid(request_payload):
         print('fail')
         return JsonResponse(json.loads(json.dumps(INVALID_PAYLOAD_RESPONSE)), status=400)
