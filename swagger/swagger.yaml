@@ -13,101 +13,371 @@ paths:
   '/crossroads/regist':
     post:
       security:
-        - bearerAuth: []
+      - OAuth2: []
       tags:
         - crossroads
       summary: Send registration photo to dummy API
-      operationId: crossroads
+      operationId: register_photos
       description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and send all of it to dummy API.
       requestBody:
-        description: User data
+        description: Photos of user faces in different angles.
         content:
           application/json:
             schema:
-              data:
-                - position: front
-                  image: <image>
-                - position: right
-                  image: <image>
-                - position: left
-                  image: <image>
-                - position: bottom
-                  image: <image>
-                - position: top
-                  image: <image>
-
+              $ref: '#/components/schemas/Regist'
+              
         required: true
       responses:
         '200':
-          description: successful operation
+          description: Successful Operation
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  message:
-                    type: string
-                    example: Payload Received
+                $ref: '#/components/schemas/PasscodeSet'
         '400':
           description: Invalid Request
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 400
-                  message:
-                    type: string
-                    description: Terjadi ketika email/password tidak sesuai format penulisan. Invalid Request terjadi ketika payload tidak sesuai format.
-                    example: "Invalid Payload"
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  '/crossroads/registpasscode':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - crossroads
+      summary: Send registration photo to dummy API
+      operationId: register_passcode
+      description: Passcode chosen from frontend is sent to backend in a string id. Backend validate the paylod and send it to dummy API.
+      requestBody:
+        description: Passcode chosen by user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistPasscode'
+              
+        required: true
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterSuccess'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  '/crossroads/identify':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - crossroads
+      summary: Send identification photo to dummy API
+      operationId: identification_photos
+      description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and send it to dummy API.
+      requestBody:
+        description: One photo of user's face.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Identification'
+        required: true
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasscodeSetIdentify'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  '/crossroads/identifypasscode':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - crossroads
+      summary: Send registration photo to dummy API
+      operationId: identification_passcode
+      description: Passcode chosen from frontend is sent to backend in a string id. Backend validate the paylod and send it to dummy API.
+      requestBody:
+        description: Passcode chosen by user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistPasscode'
+              
+        required: true
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentificationSuccess'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
 components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth/authorize
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            admin: Grants access to admin operations
   schemas:
+    Regist:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              position:
+                type: "string"
+                example: "front"
+                enum: 
+                  - "front"
+                  - "right"
+                  - "left"
+                  - "bottom"
+                  - "top"
+              image:
+                type: "string"
+                format: "base64"
+                example: "ADWsfbsgsagEWAF9g7dSGE0"
+          example:
+            - position: front
+              image: "<image>"
+            - position: right
+              image: "<image>"
+            - position: left
+              image: "<image>"
+            - position: bottom
+              image: "<image>"
+            - position: top
+              image: "<image>"
+    PasscodeSet:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Payload Received
+        passcode_set:
+          type: array
+          items:
+            type: "string"
+            enum:
+              - "Grapes"
+              - "Melon"
+              - "Watermelon"
+              - "Tangerine"
+              - "Lemon"
+              - "Banana"
+              - "Pineapple"
+              - "Mango"
+              - "Apple"
+              - "Pear"
+              - "Peach"
+              - "Cherries"
+              - "Strawberry"
+              - "Kiwi"
+              - "Tomato"
+              - "Coconut"
+              - "Avocado"
+              - "Eggplant"
+              - "Cucumber"
+          example: 
+            - "Grapes"
+            - "Melon"
+            - "Watermelon"
+            - "Tangerine"
+            - "Lemon"
+            - "Pineapple"
+            - "Mango"
+            - "Apple"
+            - "Kiwi"
+            - "Tomato"
+    PasscodeSetIdentify:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Payload Received
+        passcode_set:
+          type: array
+          items:
+            type: "string"
+            enum:
+              - "Grapes"
+              - "Melon"
+              - "Watermelon"
+              - "Tangerine"
+              - "Lemon"
+              - "Banana"
+              - "Pineapple"
+              - "Mango"
+              - "Apple"
+              - "Pear"
+              - "Peach"
+              - "Cherries"
+              - "Strawberry"
+              - "Kiwi"
+              - "Tomato"
+              - "Coconut"
+              - "Avocado"
+              - "Eggplant"
+              - "Cucumber"
+          example: 
+            - "Grapes"
+            - "Melon"
+            - "Watermelon"
+            - "Tomato"
+    RegistPasscode:
+      type: object
+      properties:
+        passcode:
+          type: string
+          enum:
+            - "Grapes"
+            - "Melon"
+            - "Watermelon"
+            - "Tangerine"
+            - "Lemon"
+            - "Banana"
+            - "Pineapple"
+            - "Mango"
+            - "Apple"
+            - "Pear"
+            - "Peach"
+            - "Cherries"
+            - "Strawberry"
+            - "Kiwi"
+            - "Tomato"
+            - "Coconut"
+            - "Avocado"
+            - "Eggplant"
+            - "Cucumber"
+          example: "Grapes"
+    RegisterSuccess:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: "User registration successful"
+    Identification:
+      type: object
+      properties:
+        photo:
+          type: string
+          format: "base64"
+          example: "OJGNdgaFADGVJ1245PDAGaadf"
+    IdentificationSuccess:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: "User identification successful"
     ApiErrorResponse:
       type: object
       properties:
         code:
           type: integer
-          example: 500001
+          example: 500
         message:
           type: string
+          example: "Internal Server Error"
     Forbidden:
       type: object
       properties:
         code:
           type: integer
-          example: 403002
+          example: 403
         message:
           type: string
-          example: Forbidden
+          example: Forbidden Access
     InvalidRequest:
       type: object
       properties:
         code:
           type: integer
-          example: 400001
+          example: 400
         message:
           type: string
-          example: Invalid Request
-    NotFound:
-      type: object
-      properties:
-        code:
-          type: integer
-          example: 404002
-        message:
-          type: string
-          example: data not found
-    Success:
-      type: object
-      properties:
-        code:
-          type: integer
-          example: 200001
-        message:
-          type: string
-          example: success
+          description: Terjadi ketika email/password tidak sesuai format penulisan. Invalid Request terjadi ketika payload tidak sesuai format.
+          example: "Invalid Payload"
