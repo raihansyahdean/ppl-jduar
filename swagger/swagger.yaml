@@ -7,15 +7,17 @@ info:
 servers:
   - url: 'https://ppl-smartcrm-backend.herokuapp.com/'
 tags:
-  - name: crossroads
-    description: API Connectivity to dummy and frontend
+  - name: Registration
+    description: Path to register user
+  - name: Identification
+    description: Path to identify user
 paths:
   '/crossroads/regist':
     post:
       security:
       - OAuth2: []
       tags:
-        - crossroads
+        - Registration
       summary: Send registration photo to dummy API
       operationId: register_photos
       description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and send all of it to dummy API.
@@ -25,7 +27,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Regist'
-              
+
         required: true
       responses:
         '200':
@@ -57,7 +59,7 @@ paths:
       security:
       - OAuth2: []
       tags:
-        - crossroads
+        - Registration
       summary: Send registration photo to dummy API
       operationId: register_passcode
       description: Passcode chosen from frontend is sent to backend in a string id. Backend validate the paylod and send it to dummy API.
@@ -67,7 +69,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RegistPasscode'
-              
+
         required: true
       responses:
         '200':
@@ -99,7 +101,7 @@ paths:
       security:
       - OAuth2: []
       tags:
-        - crossroads
+        - Identification
       summary: Send identification photo to dummy API
       operationId: identification_photos
       description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and send it to dummy API.
@@ -140,7 +142,7 @@ paths:
       security:
       - OAuth2: []
       tags:
-        - crossroads
+        - Identification
       summary: Send registration photo to dummy API
       operationId: identification_passcode
       description: Passcode chosen from frontend is sent to backend in a string id. Backend validate the paylod and send it to dummy API.
