@@ -12,21 +12,57 @@ tags:
   - name: Identification
     description: Path to identify user
 paths:
-  '/crossroads/regist':
+  '/crossroads/regist from FE':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - Registration
+      summary: Receive registration photo from Front End
+      operationId: register_photos_form FE
+      description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and setting up the json to send to dummy. All responses here are sent to front end.
+      requestBody:
+        description: Photos of user faces in different angles.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistFromFE'
+
+        required: true
+      responses:
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  '/crossroads/regist to Dummy':
     post:
       security:
       - OAuth2: []
       tags:
         - Registration
       summary: Send registration photo to dummy API
-      operationId: register_photos
-      description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and send all of it to dummy API.
+      operationId: register_photos_to_dummy
+      description: Compressed photos are packed into json payload and then sent to dummy.
       requestBody:
         description: Photos of user faces in different angles.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Regist'
+              $ref: '#/components/schemas/RegistToDummy'
 
         required: true
       responses:
@@ -96,14 +132,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorResponse'
-  '/crossroads/identify':
+  '/crossroads/identify from FE':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - Identification
+      summary: Receive identification photo from Front End
+      operationId: identification_photos_from_fe
+      description: Compressed photos are packed into json payload and then sent to dummy.
+      requestBody:
+        description: One photo of user's face.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Identification'
+        required: true
+      responses:
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  '/crossroads/identify to Dummy':
     post:
       security:
       - OAuth2: []
       tags:
         - Identification
       summary: Send identification photo to dummy API
-      operationId: identification_photos
+      operationId: identification_photos_to_dummy
       description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and send it to dummy API.
       requestBody:
         description: One photo of user's face.
@@ -152,7 +223,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RegistPasscode'
-              
+
         required: true
       responses:
         '200':
@@ -190,7 +261,20 @@ components:
           scopes:
             admin: Grants access to admin operations
   schemas:
-    Regist:
+    RegistFromFE:
+      type: object
+      properties:
+        images:
+          type: string
+          format: base64
+          description: "5 photos of faces, facing front, right, left, up, down consecutively"
+          example:
+          - "ADWsfbsgsagEWAF9g7dSGE0"
+          - "ADWsfbsgsagEWAF9g7dSGE0"
+          - "ADWsfbsgsagEWAF9g7dSGE0"
+          - "ADWsfbsgsagEWAF9g7dSGE0"
+          - "ADWsfbsgsagEWAF9g7dSGE0"
+    RegistToDummy:
       type: object
       properties:
         data:
@@ -201,7 +285,7 @@ components:
               position:
                 type: "string"
                 example: "front"
-                enum: 
+                enum:
                   - "front"
                   - "right"
                   - "left"
@@ -255,7 +339,7 @@ components:
               - "Avocado"
               - "Eggplant"
               - "Cucumber"
-          example: 
+          example:
             - "Grapes"
             - "Melon"
             - "Watermelon"
@@ -265,44 +349,6 @@ components:
             - "Mango"
             - "Apple"
             - "Kiwi"
-            - "Tomato"
-    PasscodeSetIdentify:
-      type: object
-      properties:
-        code:
-          type: integer
-          example: 200
-        message:
-          type: string
-          example: Payload Received
-        passcode_set:
-          type: array
-          items:
-            type: "string"
-            enum:
-              - "Grapes"
-              - "Melon"
-              - "Watermelon"
-              - "Tangerine"
-              - "Lemon"
-              - "Banana"
-              - "Pineapple"
-              - "Mango"
-              - "Apple"
-              - "Pear"
-              - "Peach"
-              - "Cherries"
-              - "Strawberry"
-              - "Kiwi"
-              - "Tomato"
-              - "Coconut"
-              - "Avocado"
-              - "Eggplant"
-              - "Cucumber"
-          example: 
-            - "Grapes"
-            - "Melon"
-            - "Watermelon"
             - "Tomato"
     RegistPasscode:
       type: object
@@ -342,7 +388,7 @@ components:
     Identification:
       type: object
       properties:
-        photo:
+        image:
           type: string
           format: "base64"
           example: "OJGNdgaFADGVJ1245PDAGaadf"
@@ -355,15 +401,44 @@ components:
         message:
           type: string
           example: "User identification successful"
-    ApiErrorResponse:
+    PasscodeSetIdentify:
       type: object
       properties:
         code:
           type: integer
-          example: 500
+          example: 200
         message:
           type: string
-          example: "Internal Server Error"
+          example: Payload Received
+        passcode_set:
+          type: array
+          items:
+            type: "string"
+            enum:
+              - "Grapes"
+              - "Melon"
+              - "Watermelon"
+              - "Tangerine"
+              - "Lemon"
+              - "Banana"
+              - "Pineapple"
+              - "Mango"
+              - "Apple"
+              - "Pear"
+              - "Peach"
+              - "Cherries"
+              - "Strawberry"
+              - "Kiwi"
+              - "Tomato"
+              - "Coconut"
+              - "Avocado"
+              - "Eggplant"
+              - "Cucumber"
+          example:
+            - "Grapes"
+            - "Melon"
+            - "Watermelon"
+            - "Tomato"
     Forbidden:
       type: object
       properties:
@@ -382,4 +457,16 @@ components:
         message:
           type: string
           description: Terjadi ketika email/password tidak sesuai format penulisan. Invalid Request terjadi ketika payload tidak sesuai format.
-          example: "Invalid Payload"
+          example: "Invalid Request"
+    ApiErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 500
+        message:
+          type: string
+          enum:
+          - "Internal Server: Create Payload Failed"
+          - "Internal Server: Invalid Payload"
+          example: "Internal Server: Invalid Payload"
