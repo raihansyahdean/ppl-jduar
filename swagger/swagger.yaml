@@ -20,7 +20,7 @@ paths:
         - Registration
       summary: Receive registration photo from Front End
       operationId: register_photos_form FE
-      description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and setting up the json to send to dummy. All responses here are sent to front end.
+      description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and setting up the json to send to API Smart CRM XQ. All responses here are sent to front end.
       requestBody:
         description: Photos of user faces in different angles.
         content:
@@ -48,21 +48,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorResponse'
-  '/crossroads/regist to Dummy':
+  '/crossroads/regist to API Smart CRM XQ':
     post:
       security:
       - OAuth2: []
       tags:
         - Registration
-      summary: Send registration photo to dummy API
-      operationId: register_photos_to_dummy
-      description: Compressed photos are packed into json payload and then sent to dummy.
+      summary: Send registration photo to API Smart CRM XQ
+      operationId: register_photos_to_xq
+      description: Compressed photos are packed into json payload and then sent to API Smart CRM XQ.
       requestBody:
         description: Photos of user faces in different angles.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegistToDummy'
+              $ref: '#/components/schemas/RegistToXQ'
 
         required: true
       responses:
@@ -96,15 +96,15 @@ paths:
       - OAuth2: []
       tags:
         - Registration
-      summary: Send registration photo to dummy API
+      summary: Send registration photo to API Smart CRM XQ
       operationId: register_passcode
-      description: Passcode chosen from frontend is sent to backend in a string id. Backend validate the paylod and send it to dummy API.
+      description: Passcode chosen from frontend is sent to backend in a string id. Backend validate the paylod and send it to API Smart CRM XQ.
       requestBody:
         description: Passcode chosen by user.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegistPasscode'
+              $ref: '#/components/schemas/ChosenPasscode'
 
         required: true
       responses:
@@ -140,7 +140,7 @@ paths:
         - Identification
       summary: Receive identification photo from Front End
       operationId: identification_photos_from_fe
-      description: Compressed photos are packed into json payload and then sent to dummy.
+      description: Compressed photos are packed into json payload and then sent to API Smart CRM XQ.
       requestBody:
         description: One photo of user's face.
         content:
@@ -167,15 +167,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorResponse'
-  '/crossroads/identify to Dummy':
+  '/crossroads/identify to API Smart CRM XQ':
     post:
       security:
       - OAuth2: []
       tags:
         - Identification
-      summary: Send identification photo to dummy API
-      operationId: identification_photos_to_dummy
-      description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and send it to dummy API.
+      summary: Send identification photo to API Smart CRM XQ API
+      operationId: identification_photos_to_xq
+      description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and send it to API Smart CRM XQ.
       requestBody:
         description: One photo of user's face.
         content:
@@ -214,15 +214,15 @@ paths:
       - OAuth2: []
       tags:
         - Identification
-      summary: Send registration photo to dummy API
+      summary: Send registration photo to API Smart CRM XQ
       operationId: identification_passcode
-      description: Passcode chosen from frontend is sent to backend in a string id. Backend validate the paylod and send it to dummy API.
+      description: Passcode chosen from frontend is sent to backend in a string id. Backend validate the paylod and send it to API Smart CRM XQ.
       requestBody:
         description: Passcode chosen by user.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegistPasscode'
+              $ref: '#/components/schemas/ChosenPasscode'
 
         required: true
       responses:
@@ -274,7 +274,7 @@ components:
           - "ADWsfbsgsagEWAF9g7dSGE0"
           - "ADWsfbsgsagEWAF9g7dSGE0"
           - "ADWsfbsgsagEWAF9g7dSGE0"
-    RegistToDummy:
+    RegistToXQ:
       type: object
       properties:
         data:
@@ -315,7 +315,7 @@ components:
         message:
           type: string
           example: Payload Received
-        passcode_set:
+        available_passcodes:
           type: array
           items:
             type: "string"
@@ -350,10 +350,10 @@ components:
             - "Apple"
             - "Kiwi"
             - "Tomato"
-    RegistPasscode:
+    ChosenPasscode:
       type: object
       properties:
-        passcode:
+        chosen_passcode:
           type: string
           enum:
             - "Grapes"
