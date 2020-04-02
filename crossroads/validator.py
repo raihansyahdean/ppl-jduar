@@ -2,69 +2,41 @@
 Validate json payload before request
 """
 
-IMAGE_TEMPLATE = "<image>"
-
-PAYLOAD_TEMPLATE = {
-    "data": [
-        {
-            "position": "front",
-            "image": IMAGE_TEMPLATE
-        },
-        {
-            "position": "right",
-            "image": IMAGE_TEMPLATE
-        },
-        {
-            "position": "left",
-            "image": IMAGE_TEMPLATE
-        },
-        {
-            "position": "bottom",
-            "image": IMAGE_TEMPLATE
-        },
-        {
-            "position": "top",
-            "image": IMAGE_TEMPLATE
-        }
-    ]
+VALID_POSITION_FLAG = {
+    "front": False,
+    "right": False,
+    "left": False,
+    "bottom": False,
+    "top": False
 }
 
-
-def payload_isvalid(payload):
+def validate_regist_payload(payload):
     """
     Validate payload based on template.
     :param payload: dictionary that will be dumped to json and sent as payload
-    :return: True if valid. False otherwise
+    :return: Raises error if invalid
     """
-    valid_position_flag = {
-        "front": False,
-        "right": False,
-        "left": False,
-        "bottom": False,
-        "top": False}
-    try:
-        data = payload["data"]
+    data = payload["data"]
 
-        # Check json keys
-        for photos in data:
-            position = photos["position"]
-            # Check for duplicate direction
-            if valid_position_flag[position]:
-                print("invalid flag")
-                return False
-            valid_position_flag[position] = True
-            image = photos["image"]
-            if not isinstance(image, str):
-                print("invalid type")
-                return False
+    for key in VALID_POSITION_FLAG:
+        VALID_POSITION_FLAG[key] = False
 
-        # Check if there's missing images
-        for value in valid_position_flag.values():
-            if not value:
-                print("Missing direction")
-                return False
+    # Check json keys
+    for photos in data:
+        position = photos["position"]
+        # Check for duplicate direction
+        if VALID_POSITION_FLAG[position]:
+            err_msg = "Invalid Payload Flag"
+            raise Exception(err_msg)
 
-        return True
+        VALID_POSITION_FLAG[position] = True
+        image = photos["image"]
+        if not isinstance(image, str):
+            err_msg = "Invalid Image Type"
+            raise Exception(err_msg)
 
-    except KeyError:
-        return False
+    # Check if there's missing images
+    for value in VALID_POSITION_FLAG.values():
+        if not value:
+            err_msg = "Missing Payload Flag"
+            raise Exception(err_msg)

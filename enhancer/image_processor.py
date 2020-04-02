@@ -10,7 +10,7 @@ from .compressor import compress
 IMAGE_NAMES = ["image_front.jpg", "image_right.jpg",
                "image_left.jpg", "image_top.jpg", "image_bottom.jpg"]
 
-PAYLOAD = {
+REGIST_PAYLOAD_TEMPLATE = {
     "data": [
         {
             "position": "front",
@@ -84,7 +84,8 @@ def create_register_payload(datas):
         compress("images/" + IMAGE_NAMES[i])
         delete_image("images/" + IMAGE_NAMES[i])
         compressed_data_str = image_to_data("compressed_images/compressed_" + IMAGE_NAMES[i])
-        compressed_data_str = str(compressed_data_str[2:])
-        PAYLOAD["data"][i]["image"] = compressed_data_str
+        compressed_data_str = str(compressed_data_str)
+        REGIST_PAYLOAD_TEMPLATE["data"][i]["image"] = compressed_data_str
+        delete_image("compressed_images/compressed_" + IMAGE_NAMES[i])
 
-    return PAYLOAD
+    return REGIST_PAYLOAD_TEMPLATE

@@ -5,17 +5,23 @@ import json
 from django.test import TestCase, Client
 from django.test.client import RequestFactory
 import crossroads.views as view
+import enhancer.image_processor as processor
 
-# PAYLOAD_FROM_FE = {
-#     "images": [
-#             "this is dummy image, this is dummy image, this is dummy image, this is dummy image",
-#             "this is dummy image, this is dummy image, this is dummy image, this is dummy image",
-#             "this is dummy image, this is dummy image, this is dummy image, this is dummy image",
-#             "this is dummy image, this is dummy image, this is dummy image, this is dummy image",
-#             "this is dummy image, this is dummy image, this is dummy image, this is dummy image"]
-# }
+INVALID_REGIST_PAYLOAD_FROM_FE = {
+    "images": [
+        "this is dummy image, this is dummy image, this is dummy image, this is dummy image",
+        "this is dummy image, this is dummy image, this is dummy image, this is dummy image",
+        "this is dummy image, this is dummy image, this is dummy image, this is dummy image",
+        "this is dummy image, this is dummy image, this is dummy image, this is dummy image",
+        "this is dummy image, this is dummy image, this is dummy image, this is dummy image"
+    ]
+}
 
-PAYLOAD = {
+VALID_REGIST_PAYLOAD_FROM_FE = {
+    "images": []
+}
+
+REGIST_PAYLOAD = {
     "data": [
         {
             "position": "front",
@@ -40,7 +46,7 @@ PAYLOAD = {
     ]
 }
 
-INCOMPLETE_PAYLOAD = {
+INCOMPLETE_REGIST_PAYLOAD = {
     "data": [
         {
             "position": "front",
@@ -61,7 +67,7 @@ INCOMPLETE_PAYLOAD = {
     ]
 }
 
-INVALID_PAYLOAD = {
+DUPLICATE_POS_REGIST_PAYLOAD = {
     "data": [
         {
             "position": "front",
@@ -86,7 +92,7 @@ INVALID_PAYLOAD = {
     ]
 }
 
-INVALID_TYPE_PAYLOAD = {
+INVALID_IMAGE_TYPE_REGIST_PAYLOAD = {
     "data": [
         {
             "position": "front",
@@ -111,7 +117,7 @@ INVALID_TYPE_PAYLOAD = {
     ]
 }
 
-INVALID_KEY_PAYLOAD = {
+INVALID_POS_REGIST_PAYLOAD = {
     "data": [
         {
             "position": "frofssdfgnt",
@@ -144,70 +150,97 @@ class CrossroadTest(TestCase):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
 
-    def test_valid_payload_to_dummy(self):
+    @staticmethod
+    def set_valid_regist_payload_from_fe():
+        """
+        Function to set up the valid regist payload
+        from FE: array of 5 images in bytes.
+        """
+        test_img_dir = "images/original.jpg"
+        img_str = processor.image_to_data(test_img_dir)
+        img_str = img_str.decode("utf-8")
+        img_str = "zzzzzzzzzzyyyyyyyyyyxxx" + img_str
+        for _ in range(5):
+            VALID_REGIST_PAYLOAD_FROM_FE["images"].append(img_str)
+
+    # Register Validation Tests to XQ (dummy)
+    def test_valid_regist_payload(self):
         """
         Test when payload sent is valid.
         """
-        request = self.factory.get('/crossroads/regist/', PAYLOAD)
+        request = self.factory.get('/crossroads/regist/', REGIST_PAYLOAD)
 
-        response = view.send_photos_to_dummy(request, PAYLOAD)
+        response = view.send_regist_photos(request, REGIST_PAYLOAD)
         self.assertEqual(response.status_code, 200)
 
-    def test_invalid_payload_to_dummy(self):
+    def test_duplicate_pos_regist_payload(self):
         """
         Test when payload is invalid.
         """
-        request = self.factory.get('/crossroads/regist/', INVALID_PAYLOAD)
+        request = self.factory.get('/crossroads/regist/', DUPLICATE_POS_REGIST_PAYLOAD)
 
-        response = view.send_photos_to_dummy(request, INVALID_PAYLOAD)
+        response = view.send_regist_photos(request, DUPLICATE_POS_REGIST_PAYLOAD)
         data = json.loads(response.content)
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(data["message"], "Invalid Payload")
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(data["message"], "Internal Server: Invalid Register Payload")
 
-    def test_invalid_type_payload_to_dummy(self):
+    def test_invalid_image_type_regist_payload(self):
         """
         Test when payload type is invalid.
         """
-        request = self.factory.get('/crossroads/regist/', INVALID_TYPE_PAYLOAD)
+        request = self.factory.get('/crossroads/regist/', INVALID_IMAGE_TYPE_REGIST_PAYLOAD)
 
-        response = view.send_photos_to_dummy(request, INVALID_TYPE_PAYLOAD)
+        response = view.send_regist_photos(request, INVALID_IMAGE_TYPE_REGIST_PAYLOAD)
         data = json.loads(response.content)
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(data["message"], "Invalid Payload")
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(data["message"], "Internal Server: Invalid Register Payload")
 
-    def test_invalid_key_payload_to_dummy(self):
+    def test_invalid_pos_regist_payload(self):
         """
         Test when payload key is invalid.
         """
-        request = self.factory.get('/crossroads/regist/', INVALID_KEY_PAYLOAD)
+        request = self.factory.get('/crossroads/regist/', INVALID_POS_REGIST_PAYLOAD)
 
-        response = view.send_photos_to_dummy(request, INVALID_KEY_PAYLOAD)
+        response = view.send_regist_photos(request, INVALID_POS_REGIST_PAYLOAD)
         data = json.loads(response.content)
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(data["message"], "Invalid Payload")
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(data["message"], "Internal Server: Invalid Register Payload")
 
-    def test_incomplete_payload_to_dummy(self):
+    def test_incomplete_regist_payload(self):
         """
         Test when payload is incomplete.
         """
-        request = self.factory.get('/crossroads/regist/', INCOMPLETE_PAYLOAD)
+        request = self.factory.get('/crossroads/regist/', INCOMPLETE_REGIST_PAYLOAD)
 
-        response = view.send_photos_to_dummy(request, INVALID_KEY_PAYLOAD)
+        response = view.send_regist_photos(request, INCOMPLETE_REGIST_PAYLOAD)
         data = json.loads(response.content)
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(data["message"], "Invalid Payload")
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(data["message"], "Internal Server: Invalid Register Payload")
 
-    # def test_receive_from_fe(self):
-    #     """
-    #     Test when receive post from frontend.
-    #     """
-    #     response = Client().post("/crossroads/regist/",\
-    #  PAYLOAD_FROM_FE, content_type="application/json")
-    #     self.assertEqual(response.status_code, 200)
-
-    def test_invalid_request_from_fe(self):
+    # Test Receive Requests from FE
+    def test_bad_regist_request_from_fe(self):
         """
         Test invalid request.
         """
         response = Client().get("/crossroads/regist/")
         self.assertEqual(response.status_code, 400)
+
+    def test_invalid_regist_payload_from_fe(self):
+        """
+        Test when receive invalid payload post from frontend.
+        """
+        response = Client().post("/crossroads/regist/",\
+                                  INVALID_REGIST_PAYLOAD_FROM_FE, content_type="application/json")
+        self.assertEqual(response.status_code, 500)
+
+    def test_valid_regist_payload_from_fe(self):
+        """
+        Test when receive valid payload post from frontend.
+        """
+        self.set_valid_regist_payload_from_fe()
+
+        response = Client().post('/crossroads/regist/',\
+                                data=json.dumps(VALID_REGIST_PAYLOAD_FROM_FE),\
+                                content_type="application/json")
+
+        self.assertEqual(response.status_code, 200)

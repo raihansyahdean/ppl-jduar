@@ -30,7 +30,7 @@ pylint:
     - pip install pylint pylint-exit
   script:
     - mkdir ./pylint
-    - pylint --output-format=text crossroads/tests.py crossroads/views.py crossroads/validator.py enhancer/compressor.py enhancer/image_processor.py enhancer/tests.py | tee ./pylint/pylint.txt || pylint-exit $?
+    - pylint --disable=W0702,C0301 --output-format=text crossroads/tests.py crossroads/views.py crossroads/validator.py enhancer/compressor.py enhancer/image_processor.py enhancer/tests.py | tee ./pylint/pylint.txt || pylint-exit $?
   artifacts:
     paths:
       - ./pylint/pylint.txt

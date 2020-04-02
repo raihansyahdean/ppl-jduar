@@ -99,7 +99,7 @@ class EnhancerTest(TestCase):
         self.assertEqual(str(err),
                          "The file compressed_images/compressed_large2.jpg does not exist.")
 
-    def test_create_payload_correctly(self):
+    def test_create_regist_payload_correctly(self):
         """
         Test when payload will be created correctly.
         """
@@ -115,7 +115,7 @@ class EnhancerTest(TestCase):
             cur_data = payload["data"][i]["image"]
             self.assertNotEqual(cur_data, "")
 
-    def test_create_payload_datas_length_incorrect(self):
+    def test_create_regist_payload_datas_length_incorrect(self):
         """
         Test when payload have different lengths.
         """
