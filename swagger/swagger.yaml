@@ -1,0 +1,472 @@
+openapi: 3.0.1
+info:
+  title: Smart CRM
+  description: API Documentation for Smart CRM Project by JDUAR NVIDIA Team
+  termsOfService: 'http://swagger.io/terms/'
+  version: 1.0.0
+servers:
+  - url: 'https://ppl-smartcrm-backend.herokuapp.com/'
+tags:
+  - name: Registration
+    description: Path to register user
+  - name: Identification
+    description: Path to identify user
+paths:
+  '/crossroads/regist from FE':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - Registration
+      summary: Receive registration photo from Front End
+      operationId: register_photos_form FE
+      description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and setting up the json to send to API Smart CRM XQ. All responses here are sent to front end.
+      requestBody:
+        description: Photos of user faces in different angles.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistFromFE'
+
+        required: true
+      responses:
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  '/crossroads/regist to API Smart CRM XQ':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - Registration
+      summary: Send registration photo to API Smart CRM XQ
+      operationId: register_photos_to_xq
+      description: Compressed photos are packed into json payload and then sent to API Smart CRM XQ.
+      requestBody:
+        description: Photos of user faces in different angles.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistToXQ'
+
+        required: true
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasscodeSet'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  '/crossroads/registpasscode':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - Registration
+      summary: Send registration photo to API Smart CRM XQ
+      operationId: register_passcode
+      description: Passcode chosen from frontend is sent to backend in a string id. Backend validate the paylod and send it to API Smart CRM XQ.
+      requestBody:
+        description: Passcode chosen by user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChosenPasscode'
+
+        required: true
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterSuccess'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  '/crossroads/identify from FE':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - Identification
+      summary: Receive identification photo from Front End
+      operationId: identification_photos_from_fe
+      description: Compressed photos are packed into json payload and then sent to API Smart CRM XQ.
+      requestBody:
+        description: One photo of user's face.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Identification'
+        required: true
+      responses:
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  '/crossroads/identify to API Smart CRM XQ':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - Identification
+      summary: Send identification photo to API Smart CRM XQ API
+      operationId: identification_photos_to_xq
+      description: Photo captured from frontend is sent to backend in a encoded string. Backend compressed the photo and send it to API Smart CRM XQ.
+      requestBody:
+        description: One photo of user's face.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Identification'
+        required: true
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasscodeSetIdentify'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  '/crossroads/identifypasscode':
+    post:
+      security:
+      - OAuth2: []
+      tags:
+        - Identification
+      summary: Send registration photo to API Smart CRM XQ
+      operationId: identification_passcode
+      description: Passcode chosen from frontend is sent to backend in a string id. Backend validate the paylod and send it to API Smart CRM XQ.
+      requestBody:
+        description: Passcode chosen by user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChosenPasscode'
+
+        required: true
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentificationSuccess'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '403':
+          description: Forbidden Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth/authorize
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            admin: Grants access to admin operations
+  schemas:
+    RegistFromFE:
+      type: object
+      properties:
+        images:
+          type: string
+          format: base64
+          description: "5 photos of faces, facing front, right, left, up, down consecutively"
+          example:
+          - "ADWsfbsgsagEWAF9g7dSGE0"
+          - "ADWsfbsgsagEWAF9g7dSGE0"
+          - "ADWsfbsgsagEWAF9g7dSGE0"
+          - "ADWsfbsgsagEWAF9g7dSGE0"
+          - "ADWsfbsgsagEWAF9g7dSGE0"
+    RegistToXQ:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              position:
+                type: "string"
+                example: "front"
+                enum:
+                  - "front"
+                  - "right"
+                  - "left"
+                  - "bottom"
+                  - "top"
+              image:
+                type: "string"
+                format: "base64"
+                example: "ADWsfbsgsagEWAF9g7dSGE0"
+          example:
+            - position: front
+              image: "<image>"
+            - position: right
+              image: "<image>"
+            - position: left
+              image: "<image>"
+            - position: bottom
+              image: "<image>"
+            - position: top
+              image: "<image>"
+    PasscodeSet:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Payload Received
+        available_passcodes:
+          type: array
+          items:
+            type: "string"
+            enum:
+              - "Grapes"
+              - "Melon"
+              - "Watermelon"
+              - "Tangerine"
+              - "Lemon"
+              - "Banana"
+              - "Pineapple"
+              - "Mango"
+              - "Apple"
+              - "Pear"
+              - "Peach"
+              - "Cherries"
+              - "Strawberry"
+              - "Kiwi"
+              - "Tomato"
+              - "Coconut"
+              - "Avocado"
+              - "Eggplant"
+              - "Cucumber"
+          example:
+            - "Grapes"
+            - "Melon"
+            - "Watermelon"
+            - "Tangerine"
+            - "Lemon"
+            - "Pineapple"
+            - "Mango"
+            - "Apple"
+            - "Kiwi"
+            - "Tomato"
+    ChosenPasscode:
+      type: object
+      properties:
+        chosen_passcode:
+          type: string
+          enum:
+            - "Grapes"
+            - "Melon"
+            - "Watermelon"
+            - "Tangerine"
+            - "Lemon"
+            - "Banana"
+            - "Pineapple"
+            - "Mango"
+            - "Apple"
+            - "Pear"
+            - "Peach"
+            - "Cherries"
+            - "Strawberry"
+            - "Kiwi"
+            - "Tomato"
+            - "Coconut"
+            - "Avocado"
+            - "Eggplant"
+            - "Cucumber"
+          example: "Grapes"
+    RegisterSuccess:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: "User registration successful"
+    Identification:
+      type: object
+      properties:
+        image:
+          type: string
+          format: "base64"
+          example: "OJGNdgaFADGVJ1245PDAGaadf"
+    IdentificationSuccess:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: "User identification successful"
+    PasscodeSetIdentify:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Payload Received
+        passcode_set:
+          type: array
+          items:
+            type: "string"
+            enum:
+              - "Grapes"
+              - "Melon"
+              - "Watermelon"
+              - "Tangerine"
+              - "Lemon"
+              - "Banana"
+              - "Pineapple"
+              - "Mango"
+              - "Apple"
+              - "Pear"
+              - "Peach"
+              - "Cherries"
+              - "Strawberry"
+              - "Kiwi"
+              - "Tomato"
+              - "Coconut"
+              - "Avocado"
+              - "Eggplant"
+              - "Cucumber"
+          example:
+            - "Grapes"
+            - "Melon"
+            - "Watermelon"
+            - "Tomato"
+    Forbidden:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 403
+        message:
+          type: string
+          example: Forbidden Access
+    InvalidRequest:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          description: Terjadi ketika email/password tidak sesuai format penulisan. Invalid Request terjadi ketika payload tidak sesuai format.
+          example: "Invalid Request"
+    ApiErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 500
+        message:
+          type: string
+          enum:
+          - "Internal Server: Create Payload Failed"
+          - "Internal Server: Invalid Payload"
+          example: "Internal Server: Invalid Payload"
