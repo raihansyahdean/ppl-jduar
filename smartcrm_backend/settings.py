@@ -141,3 +141,5 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1',
     "http://localhost:8080"
 ]
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880

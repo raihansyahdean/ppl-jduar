@@ -4,5 +4,5 @@ from .views import *
 
 app_name = 'crossroads'
 urlpatterns = [
-    path('regist/', receive_photos_from_fe, name='receive_photos_from_fe')
+    path('regist/', receive_regist_photos, name='receive_regist_photos')
 ]

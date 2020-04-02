@@ -10,12 +10,19 @@ from django.views.decorators.csrf import csrf_exempt
 import crossroads.validator as validator
 import enhancer.image_processor as processor
 
-INVALID_PAYLOAD_RESPONSE = {"status_code": 400, "message": "Invalid Payload"}
+# Response Templates
 INVALID_REQUEST_RESPONSE = {"status_code": 400, "message": "Invalid Request"}
-
+CREATE_REGIST_PAYLOAD_FAILED_RESPONSE = {
+    "status_code": 500,
+    "message": "Internal Server: Create Register Payload Failed"
+}
+INVALID_REGIST_PAYLOAD_RESPONSE = {
+    "status_code": 500,
+    "message": "Internal Server: Invalid Register Payload"
+}
 
 @csrf_exempt
-def receive_photos_from_fe(request):
+def receive_regist_photos(request):
     """
     Receive photos from fe after registration
     :param request:
@@ -23,29 +30,31 @@ def receive_photos_from_fe(request):
     """
     if request.method == "POST":
         body_unicode = request.body.decode('utf8')
-        request_payload = json.loads(body_unicode)
+        regist_payload = json.loads(body_unicode)
 
         images = []
-        for i in request_payload['images']:
+        for i in regist_payload['images']:
             images.append(i[23:])
+        try:
+            ready_payload = processor.create_register_payload(images)
+        except:
+            return JsonResponse(json.loads(
+                json.dumps(CREATE_REGIST_PAYLOAD_FAILED_RESPONSE)), status=500)
 
-        ready_payload = processor.create_register_payload(images)
-        print(ready_payload)
-        response_api = send_photos_to_dummy(request, ready_payload)
-        print(response_api)
+        response_api = send_regist_photos(request, ready_payload)
         return response_api
 
     return JsonResponse(json.loads(json.dumps(INVALID_REQUEST_RESPONSE)), status=400)
 
-
-def send_photos_to_dummy(request, request_payload):
+def send_regist_photos(request, request_payload):
     """
     Send payload from backend to dummy
     For further use of customer registration to XQ Informatics API
     """
-    if not validator.payload_isvalid(request_payload):
-        print('fail')
-        return JsonResponse(json.loads(json.dumps(INVALID_PAYLOAD_RESPONSE)), status=400)
+    try:
+        validator.validate_regist_payload(request_payload)
+    except:
+        return JsonResponse(json.loads(json.dumps(INVALID_REGIST_PAYLOAD_RESPONSE)), status=500)
 
     csrf_token = django.middleware.csrf.get_token(request)
     response = requests.post('https://dummy-smartcrm.herokuapp.com/payload/photos/',
@@ -54,6 +63,5 @@ def send_photos_to_dummy(request, request_payload):
 
     # Reformat response to appropriate json
     reformatted_response = response.content.decode('utf8').replace("\\", "")
-    reformatted_response = reformatted_response[1:-1]  # Remove unnecessary '
-    print('success')
+    reformatted_response = reformatted_response[1:-1]
     return JsonResponse(json.loads(reformatted_response))
