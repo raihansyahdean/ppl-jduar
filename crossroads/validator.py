@@ -10,6 +10,29 @@ VALID_POSITION_FLAG = {
     "top": False
 }
 
+VALID_FRUIT_TYPE = [
+    "Grapes",
+    "Melon",
+    "Watermelon",
+    "Tangerine",
+    "Lemon",
+    "Banana",
+    "Pineapple",
+    "Mango",
+    "Apple",
+    "Pear",
+    "Peach",
+    "Cherries",
+    "Strawberry",
+    "Kiwi",
+    "Tomato",
+    "Coconut",
+    "Avocado",
+    "Eggplant",
+    "Cucumber"
+]
+
+
 def validate_regist_payload(payload):
     """
     Validate payload based on template.
@@ -40,3 +63,20 @@ def validate_regist_payload(payload):
         if not value:
             err_msg = "Missing Payload Flag"
             raise Exception(err_msg)
+
+
+def validate_regist_passcode_payload(payload):
+    """
+    Validate passcode payload received from FE
+    :param payload: Chosen passcode by user from FE
+    :return:
+    """
+    try:
+        chosen_passcode = payload['chosen_passcode']
+
+        if chosen_passcode not in VALID_FRUIT_TYPE:
+            err_msg = "Invalid Fruit Type"
+            raise Exception(err_msg)
+    except KeyError:
+        err_msg = "Invalid JSON Key"
+        raise Exception(err_msg)
