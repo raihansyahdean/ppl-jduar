@@ -20,6 +20,11 @@ INVALID_REGIST_PAYLOAD_RESPONSE = {
     "status_code": 500,
     "message": "Internal Server: Invalid Register Payload"
 }
+INVALID_REGIST_PASSCODE_PAYLOAD = {
+    "status_code": 400,
+    "message": "Invalid Register Passcode Payload"
+}
+
 
 @csrf_exempt
 def receive_regist_photos(request):
@@ -46,6 +51,7 @@ def receive_regist_photos(request):
 
     return JsonResponse(json.loads(json.dumps(INVALID_REQUEST_RESPONSE)), status=400)
 
+
 def send_regist_photos(request, request_payload):
     """
     Send payload from backend to dummy
@@ -65,3 +71,32 @@ def send_regist_photos(request, request_payload):
     reformatted_response = response.content.decode('utf8').replace("\\", "")
     reformatted_response = reformatted_response[1:-1]
     return JsonResponse(json.loads(reformatted_response))
+
+
+@csrf_exempt
+def receive_regist_passcode(request):
+    """
+    Handle request from FE for passcode registration
+    :param request: chosen passcode in json
+    :return:
+    """
+    if request.method == "POST":
+        body_unicode = request.body.decode('utf8')
+        regist_passcode_payload = json.loads(body_unicode)
+
+        try:
+            validator.validate_regist_passcode_payload(regist_passcode_payload)
+        except:
+            return JsonResponse(json.loads(json.dumps(INVALID_REGIST_PASSCODE_PAYLOAD)), status=500)
+
+        csrf_token = django.middleware.csrf.get_token(request)
+        response = requests.post('https://dummy-smartcrm.herokuapp.com/payload/password/',
+                                 data=json.dumps(regist_passcode_payload),
+                                 headers={"CSRF-Token": csrf_token})
+
+        # Reformat response to appropriate json
+        reformatted_response = response.content.decode('utf8').replace("\\", "")
+        reformatted_response = reformatted_response[1:-1]
+        return JsonResponse(json.loads(reformatted_response))
+
+    return JsonResponse(json.loads(json.dumps(INVALID_REQUEST_RESPONSE)), status=400)

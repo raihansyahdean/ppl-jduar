@@ -142,10 +142,24 @@ INVALID_POS_REGIST_PAYLOAD = {
     ]
 }
 
+VALID_REGIST_PASSCODE_PAYLOAD = {
+    "chosen_passcode": "Grapes"
+}
+
+INVALID_FRUIT_TYPE_REGIST_PASSCODE_PAYLOAD = {
+    "chosen_passcode": "Sushi"
+}
+
+INVALID_KEY_REGIST_PASSCODE_PAYLOAD = {
+    "passcode": "Grapes"
+}
+
+
 class CrossroadTest(TestCase):
     """
     run test for crossroads app
     """
+
     def setUp(self):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
@@ -172,6 +186,8 @@ class CrossroadTest(TestCase):
 
         response = view.send_regist_photos(request, REGIST_PAYLOAD)
         self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data["available_passcodes"])
 
     def test_duplicate_pos_regist_payload(self):
         """
@@ -229,8 +245,8 @@ class CrossroadTest(TestCase):
         """
         Test when receive invalid payload post from frontend.
         """
-        response = Client().post("/crossroads/regist/",\
-                                  INVALID_REGIST_PAYLOAD_FROM_FE, content_type="application/json")
+        response = Client().post("/crossroads/regist/", \
+                                 INVALID_REGIST_PAYLOAD_FROM_FE, content_type="application/json")
         self.assertEqual(response.status_code, 500)
 
     def test_valid_regist_payload_from_fe(self):
@@ -239,8 +255,43 @@ class CrossroadTest(TestCase):
         """
         self.set_valid_regist_payload_from_fe()
 
-        response = Client().post('/crossroads/regist/',\
-                                data=json.dumps(VALID_REGIST_PAYLOAD_FROM_FE),\
-                                content_type="application/json")
+        response = Client().post('/crossroads/regist/', \
+                                 data=json.dumps(VALID_REGIST_PAYLOAD_FROM_FE), \
+                                 content_type="application/json")
 
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data["available_passcodes"])
+
+    # Test Receive Passcode From FE
+    def test_bad_regist_passcode_request_from_fe(self):
+        """
+        Test invalid request.
+        """
+        response = Client().get("/crossroads/registpasscode/")
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_key_regist_passcode_payload_from_fe(self):
+        """
+        Test when receive invalid key in payload post from frontend.
+        """
+        response = Client().post("/crossroads/registpasscode/",
+                                 INVALID_KEY_REGIST_PASSCODE_PAYLOAD, content_type="application/json")
+        self.assertEqual(response.status_code, 500)
+
+    def test_invalid_fruit_type_regist_passcode_payload_from_fe(self):
+        """
+        Test when receive invalid key in payload post from frontend.
+        """
+        response = Client().post("/crossroads/registpasscode/",
+                                 INVALID_FRUIT_TYPE_REGIST_PASSCODE_PAYLOAD, content_type="application/json")
+        self.assertEqual(response.status_code, 500)
+
+    def test_valid_regist_passcode_payload_from_fe(self):
+        """
+        Test when receive valid payload post from frontend.
+        """
+        response = Client().post('/crossroads/registpasscode/',
+                                 data=json.dumps(VALID_REGIST_PASSCODE_PAYLOAD),
+                                 content_type="application/json")
         self.assertEqual(response.status_code, 200)
