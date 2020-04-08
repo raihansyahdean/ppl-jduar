@@ -87,7 +87,7 @@ def receive_regist_passcode(request):
         try:
             validator.validate_regist_passcode_payload(regist_passcode_payload)
         except:
-            return JsonResponse(json.loads(json.dumps(INVALID_REGIST_PASSCODE_PAYLOAD)), status=500)
+            return JsonResponse(json.loads(json.dumps(INVALID_REGIST_PASSCODE_PAYLOAD)), status=400)
 
         csrf_token = django.middleware.csrf.get_token(request)
         response = requests.post('https://dummy-smartcrm.herokuapp.com/payload/password/',

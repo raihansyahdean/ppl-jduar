@@ -11,25 +11,31 @@ VALID_POSITION_FLAG = {
 }
 
 VALID_FRUIT_TYPE = [
-    "Grapes",
-    "Melon",
-    "Watermelon",
-    "Tangerine",
-    "Lemon",
-    "Banana",
-    "Pineapple",
-    "Mango",
     "Apple",
-    "Pear",
-    "Peach",
-    "Cherries",
-    "Strawberry",
-    "Kiwi",
-    "Tomato",
-    "Coconut",
+    "Apricot",
     "Avocado",
-    "Eggplant",
-    "Cucumber"
+    "Banana",
+    "Cherry",
+    "Dragon_Fruit",
+    "Durian",
+    "Grapes",
+    "Kiwi",
+    "Lemon",
+    "Lychee"
+    "Mango",
+    "Mangosteen",
+    "Orange",
+    "Papaya",
+    "Peach",
+    "Pear",
+    "Pineapple",
+    "Pomegranate",
+    "Pumpkin",
+    "Rambutan",
+    "Rose_Apple",
+    "Star_Fruit",
+    "Strawberry",
+    "Watermelon"
 ]
 
 

@@ -277,7 +277,7 @@ class CrossroadTest(TestCase):
         """
         response = Client().post("/crossroads/registpasscode/",
                                  INVALID_KEY_REGIST_PASSCODE_PAYLOAD, content_type="application/json")
-        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.status_code, 400)
 
     def test_invalid_fruit_type_regist_passcode_payload_from_fe(self):
         """
@@ -285,7 +285,7 @@ class CrossroadTest(TestCase):
         """
         response = Client().post("/crossroads/registpasscode/",
                                  INVALID_FRUIT_TYPE_REGIST_PASSCODE_PAYLOAD, content_type="application/json")
-        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.status_code, 400)
 
     def test_valid_regist_passcode_payload_from_fe(self):
         """
