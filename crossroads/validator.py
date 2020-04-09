@@ -21,7 +21,7 @@ VALID_FRUIT_TYPE = [
     "Grapes",
     "Kiwi",
     "Lemon",
-    "Lychee"
+    "Lychee",
     "Mango",
     "Mangosteen",
     "Orange",
