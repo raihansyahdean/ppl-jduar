@@ -2,6 +2,8 @@
 Validate json payload before request
 """
 
+INVALID_JSON_KEY_RESPONSE = "Invalid JSON Key"
+
 VALID_POSITION_FLAG = {
     "front": False,
     "right": False,
@@ -70,6 +72,22 @@ def validate_regist_payload(payload):
             err_msg = "Missing Payload Flag"
             raise Exception(err_msg)
 
+def validate_identification_payload(payload):
+    """
+    Validate identification payload based on template.
+    :param payload: dictionary that will be dumped to json and sent as payload
+    :return: Raises error if invalid
+    """
+    try:
+        image_str = payload['image']
+
+        if not isinstance(image_str, str) or image_str == "":
+            err_msg = "Invalid Image"
+            raise Exception(err_msg)
+
+    except KeyError:
+        err_msg = INVALID_JSON_KEY_RESPONSE
+        raise Exception(err_msg)
 
 def validate_regist_passcode_payload(payload):
     """
@@ -84,5 +102,21 @@ def validate_regist_passcode_payload(payload):
             err_msg = "Invalid Fruit Type"
             raise Exception(err_msg)
     except KeyError:
-        err_msg = "Invalid JSON Key"
+        err_msg = INVALID_JSON_KEY_RESPONSE
+        raise Exception(err_msg)
+
+def validate_identification_passcode_payload(payload):
+    """
+    Validate passcode payload received from FE
+    :param payload: Chosen passcode by user from FE
+    :return:
+    """
+    try:
+        passcode = payload['passcode']
+
+        if passcode not in VALID_FRUIT_TYPE:
+            err_msg = "Invalid Fruit Type"
+            raise Exception(err_msg)
+    except KeyError:
+        err_msg = INVALID_JSON_KEY_RESPONSE
         raise Exception(err_msg)

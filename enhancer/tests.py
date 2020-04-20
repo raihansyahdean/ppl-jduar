@@ -6,8 +6,8 @@ import sys
 from io import BytesIO
 from django.test import TestCase
 from PIL import Image
+import enhancer.image_processor as processor
 from .compressor import compress
-from .image_processor import delete_image, data_to_image, image_to_data, create_register_payload
 
 class EnhancerTest(TestCase):
     """
@@ -47,7 +47,7 @@ class EnhancerTest(TestCase):
         Test to convert an image to base64.
         """
         test_img_dir = "compressed_images/compressed_large.jpg"
-        result = image_to_data(test_img_dir)
+        result = processor.image_to_data(test_img_dir)
 
         image = Image.open(test_img_dir)
         buffered = BytesIO()
@@ -60,7 +60,7 @@ class EnhancerTest(TestCase):
         """
         test_img_dir = "compressed_images/compressed_large2.jpg"
         with self.assertRaises(Exception) as the_error:
-            image_to_data(test_img_dir)
+            processor.image_to_data(test_img_dir)
         err = the_error.exception
         self.assertEqual(str(err),
                          "File compressed_images/compressed_large2.jpg not found.")
@@ -77,8 +77,8 @@ class EnhancerTest(TestCase):
         image.save(buffered, format="JPEG")
         img_str = base64.b64encode(buffered.getvalue())
 
-        data_to_image(img_str, "decoded_image.jpg")
-        delete_image("images/decoded_image.jpg")
+        processor.data_to_image(img_str, "decoded_image.jpg")
+        processor.delete_image("images/decoded_image.jpg")
 
     @staticmethod
     def test_delete_image_successful():
@@ -86,7 +86,7 @@ class EnhancerTest(TestCase):
         Test to delete an image from a directory.
         """
         test_img_dir = "compressed_images/compressed_large.jpg"
-        delete_image(test_img_dir)
+        processor.delete_image(test_img_dir)
 
     def test_delete_image_does_not_exist(self):
         """
@@ -94,7 +94,7 @@ class EnhancerTest(TestCase):
         """
         test_img_dir = "compressed_images/compressed_large2.jpg"
         with self.assertRaises(Exception) as the_error:
-            delete_image(test_img_dir)
+            processor.delete_image(test_img_dir)
         err = the_error.exception
         self.assertEqual(str(err),
                          "The file compressed_images/compressed_large2.jpg does not exist.")
@@ -104,12 +104,12 @@ class EnhancerTest(TestCase):
         Test when payload will be created correctly.
         """
         test_img_dir = "images/large.jpg"
-        data_str = image_to_data(test_img_dir)
+        data_str = processor.image_to_data(test_img_dir)
 
         datas = []
         for _ in range(5):
             datas.append(data_str)
-        payload = create_register_payload(datas)
+        payload = processor.create_register_payload(datas)
 
         for i in range(5):
             cur_data = payload["data"][i]["image"]
@@ -120,13 +120,25 @@ class EnhancerTest(TestCase):
         Test when payload have different lengths.
         """
         test_img_dir = "images/large.jpg"
-        data_str = image_to_data(test_img_dir)
+        data_str = processor.image_to_data(test_img_dir)
 
         datas = []
         for _ in range(4):
             datas.append(data_str)
 
         with self.assertRaises(Exception) as the_error:
-            create_register_payload(datas)
+            processor.create_register_payload(datas)
         err = the_error.exception
         self.assertEqual(str(err), "Data length must be 5.")
+
+    def test_create_identification_payload_correctly(self):
+        """
+        Test when payload will be created correctly.
+        """
+        test_img_dir = "images/large.jpg"
+        data_str = processor.image_to_data(test_img_dir)
+
+        payload = processor.create_identification_payload(data_str)
+
+        cur_data = payload["image"]
+        self.assertNotEqual(cur_data, "")
