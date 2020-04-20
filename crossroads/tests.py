@@ -154,6 +154,46 @@ INVALID_KEY_REGIST_PASSCODE_PAYLOAD = {
     "passcode": "Grapes"
 }
 
+VALID_IDENTIFICATION_PAYLOAD = {
+    "image": "<image>"
+}
+
+INVALID_KEY_IDENTIFICATION_PAYLOAD = {
+    "myimage": "<image>"
+}
+
+INVALID_IMAGE_TYPE_IDENTIFICATION_PAYLOAD = {
+    "image": 333333
+}
+
+INVALID_IMAGE_EMPTY_IDENTIFICATION_PAYLOAD = {
+    "image": ""
+}
+
+INVALID_IDENTIFICATION_PAYLOAD_FROM_FE = {
+    "image": "this is dummy image, this is dummy image, this is dummy image, this is dummy image"
+}
+
+VALID_IDENTIFICATION_PAYLOAD_FROM_FE = {
+    "image": ""
+}
+
+VALID_IDENTIFICATION_PASSCODE_PAYLOAD = {
+    "passcode": "Grapes"
+}
+
+FAIL_IDENTIFICATION_PASSCODE_PAYLOAD = {
+    "passcode": "Watermelon"
+}
+
+INVALID_FRUIT_TYPE_IDENTIFICATION_PASSCODE_PAYLOAD = {
+    "passcode": "Sushi"
+}
+
+INVALID_KEY_IDENTIFICATION_PASSCODE_PAYLOAD = {
+    "password": "Grapes"
+}
+
 
 class CrossroadTest(TestCase):
     """
@@ -176,6 +216,18 @@ class CrossroadTest(TestCase):
         img_str = "zzzzzzzzzzyyyyyyyyyyxxx" + img_str
         for _ in range(5):
             VALID_REGIST_PAYLOAD_FROM_FE["images"].append(img_str)
+
+    @staticmethod
+    def set_valid_identification_payload_from_fe():
+        """
+        Function to set up the valid identification payload
+        from FE: 1 image in bytes.
+        """
+        test_img_dir = "images/original.jpg"
+        img_str = processor.image_to_data(test_img_dir)
+        img_str = img_str.decode("utf-8")
+        img_str = "zzzzzzzzzzyyyyyyyyyyxxx" + img_str
+        VALID_IDENTIFICATION_PAYLOAD_FROM_FE["image"] = img_str
 
     # Register Validation Tests to XQ (dummy)
     def test_valid_regist_payload(self):
@@ -295,3 +347,124 @@ class CrossroadTest(TestCase):
                                  data=json.dumps(VALID_REGIST_PASSCODE_PAYLOAD),
                                  content_type="application/json")
         self.assertEqual(response.status_code, 200)
+
+    # Identification Validation Tests to XQ (dummy)
+    def test_valid_identification_payload(self):
+        """
+        Test when payload sent is valid.
+        """
+        request = self.factory.get('/crossroads/identify/', VALID_IDENTIFICATION_PAYLOAD)
+
+        response = view.send_identification_photo(request, VALID_IDENTIFICATION_PAYLOAD)
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data["passcode_set"])
+
+    def test_invalid_key_identification_payload(self):
+        """
+        Test when receive invalid key in payload post from frontend.
+        """
+        request = self.factory.get('/crossroads/identify/', INVALID_KEY_IDENTIFICATION_PAYLOAD)
+
+        response = view.send_identification_photo(request, INVALID_KEY_IDENTIFICATION_PAYLOAD)
+        self.assertEqual(response.status_code, 500)
+        data = json.loads(response.content)
+        self.assertEqual(data["message"], "Internal Server: Invalid Identification Payload")
+
+    def test_invalid_image_type_identification_payload(self):
+        """
+        Test when receive invalid key in payload post from frontend.
+        """
+        request = self.factory.get('/crossroads/identify/', INVALID_IMAGE_TYPE_IDENTIFICATION_PAYLOAD)
+
+        response = view.send_identification_photo(request, INVALID_IMAGE_TYPE_IDENTIFICATION_PAYLOAD)
+        self.assertEqual(response.status_code, 500)
+        data = json.loads(response.content)
+        self.assertEqual(data["message"], "Internal Server: Invalid Identification Payload")
+
+    def test_invalid_image_empty_identification_payload(self):
+        """
+        Test when receive invalid key in payload post from frontend.
+        """
+        request = self.factory.get('/crossroads/identify/', INVALID_IMAGE_EMPTY_IDENTIFICATION_PAYLOAD)
+
+        response = view.send_identification_photo(request, INVALID_IMAGE_EMPTY_IDENTIFICATION_PAYLOAD)
+        self.assertEqual(response.status_code, 500)
+        data = json.loads(response.content)
+        self.assertEqual(data["message"], "Internal Server: Invalid Identification Payload")
+
+    # Test Receive identification Requests from FE
+    def test_bad_identification_request_from_fe(self):
+        """
+        Test invalid request.
+        """
+        response = Client().get("/crossroads/identify/")
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_identification_payload_from_fe(self):
+        """
+        Test when receive invalid payload post from frontend.
+        """
+        response = Client().post("/crossroads/identify/", \
+                                 INVALID_IDENTIFICATION_PAYLOAD_FROM_FE, content_type="application/json")
+        self.assertEqual(response.status_code, 500)
+
+    def test_valid_identification_payload_from_fe(self):
+        """
+        Test when receive valid payload post from frontend.
+        """
+        self.set_valid_identification_payload_from_fe()
+
+        response = Client().post('/crossroads/identify/', \
+                                 data=json.dumps(VALID_IDENTIFICATION_PAYLOAD_FROM_FE), \
+                                 content_type="application/json")
+
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data["passcode_set"])
+
+    # Test Receive Identification Passcode From FE
+    def test_bad_identification_passcode_request_from_fe(self):
+        """
+        Test invalid request.
+        """
+        response = Client().get("/crossroads/identifypasscode/")
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_key_identification_passcode_payload_from_fe(self):
+        """
+        Test when receive invalid key in payload post from frontend.
+        """
+        response = Client().post("/crossroads/identifypasscode/",
+                                 INVALID_KEY_IDENTIFICATION_PASSCODE_PAYLOAD, content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_fruit_type_identification_passcode_payload_from_fe(self):
+        """
+        Test when receive invalid key in payload post from frontend.
+        """
+        response = Client().post("/crossroads/identifypasscode/",
+                                 INVALID_FRUIT_TYPE_IDENTIFICATION_PASSCODE_PAYLOAD, content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+
+    def test_valid_identification_passcode_payload_from_fe(self):
+        """
+        Test when receive valid payload post from frontend.
+        """
+        response = Client().post('/crossroads/identifypasscode/',
+                                 data=json.dumps(VALID_IDENTIFICATION_PASSCODE_PAYLOAD),
+                                 content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEqual(data["message"], "User Identification Successful")
+
+    def test_fail_identification_passcode_payload_from_fe(self):
+        """
+        Test when receive valid payload post from frontend.
+        """
+        response = Client().post('/crossroads/identifypasscode/',
+                                 data=json.dumps(FAIL_IDENTIFICATION_PASSCODE_PAYLOAD),
+                                 content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEqual(data["message"], "User Identification Failed: Passcode Incorrect")

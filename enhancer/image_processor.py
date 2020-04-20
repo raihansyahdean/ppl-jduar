@@ -7,8 +7,12 @@ from io import BytesIO
 from PIL import Image
 from .compressor import compress
 
-IMAGE_NAMES = ["image_front.jpg", "image_right.jpg",
-               "image_left.jpg", "image_top.jpg", "image_bottom.jpg"]
+COMPRESSED_DIR = "compressed_images/compressed_"
+
+IMAGE_DIR = "images/"
+
+REGISTRATION_IMAGE_NAMES = ["image_front.jpg", "image_right.jpg",
+                            "image_left.jpg", "image_top.jpg", "image_bottom.jpg"]
 
 REGIST_PAYLOAD_TEMPLATE = {
     "data": [
@@ -35,6 +39,11 @@ REGIST_PAYLOAD_TEMPLATE = {
     ]
 }
 
+IDENTIFICATION_PAYLOAD_TEMPLATE = {
+    "image": ""
+}
+
+IDENTIFICATION_IMAGE_NAME = "identify_image.jpg"
 
 def delete_image(image_file_dir):
     """
@@ -80,12 +89,29 @@ def create_register_payload(datas):
         raise Exception(err_msg)
 
     for i in range(5):
-        data_to_image(datas[i], IMAGE_NAMES[i])
-        compress("images/" + IMAGE_NAMES[i])
-        delete_image("images/" + IMAGE_NAMES[i])
-        compressed_data_str = image_to_data("compressed_images/compressed_" + IMAGE_NAMES[i])
+        data_to_image(datas[i], REGISTRATION_IMAGE_NAMES[i])
+        compress(IMAGE_DIR + REGISTRATION_IMAGE_NAMES[i])
+        delete_image(IMAGE_DIR + REGISTRATION_IMAGE_NAMES[i])
+        compressed_data_str = image_to_data(COMPRESSED_DIR + REGISTRATION_IMAGE_NAMES[i])
         compressed_data_str = str(compressed_data_str)
         REGIST_PAYLOAD_TEMPLATE["data"][i]["image"] = compressed_data_str
-        delete_image("compressed_images/compressed_" + IMAGE_NAMES[i])
+        delete_image(COMPRESSED_DIR + REGISTRATION_IMAGE_NAMES[i])
 
     return REGIST_PAYLOAD_TEMPLATE
+
+def create_identification_payload(image_str):
+    """
+    Function to save identification image to json format ready to be sent.
+    Datas is an image in base64 format.
+    Returns complete payload.
+    """
+
+    data_to_image(image_str, IDENTIFICATION_IMAGE_NAME)
+    compress(IMAGE_DIR + IDENTIFICATION_IMAGE_NAME)
+    delete_image(IMAGE_DIR + IDENTIFICATION_IMAGE_NAME)
+    compressed_data_str = image_to_data(COMPRESSED_DIR + IDENTIFICATION_IMAGE_NAME)
+    compressed_data_str = str(compressed_data_str)
+    IDENTIFICATION_PAYLOAD_TEMPLATE["image"] = compressed_data_str
+    delete_image(COMPRESSED_DIR + IDENTIFICATION_IMAGE_NAME)
+
+    return IDENTIFICATION_PAYLOAD_TEMPLATE
