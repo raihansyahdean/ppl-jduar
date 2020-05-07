@@ -1,3 +1,2 @@
 #!/bin/bash
-python manage.py makemigrations
-python manage.py migrate
+python3 'enhancer/setup.py' build_ext --inplace
