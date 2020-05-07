@@ -210,7 +210,7 @@ class CrossroadTest(TestCase):
         Function to set up the valid regist payload
         from FE: array of 5 images in bytes.
         """
-        test_img_dir = "images/original.jpg"
+        test_img_dir = "images/SharpHouse.jpg"
         img_str = processor.image_to_data(test_img_dir)
         img_str = img_str.decode("utf-8")
         img_str = "zzzzzzzzzzyyyyyyyyyyxxx" + img_str
@@ -223,7 +223,7 @@ class CrossroadTest(TestCase):
         Function to set up the valid identification payload
         from FE: 1 image in bytes.
         """
-        test_img_dir = "images/original.jpg"
+        test_img_dir = "images/SharpHouse.jpg"
         img_str = processor.image_to_data(test_img_dir)
         img_str = img_str.decode("utf-8")
         img_str = "zzzzzzzzzzyyyyyyyyyyxxx" + img_str
