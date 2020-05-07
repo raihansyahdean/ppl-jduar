@@ -1,7 +1,7 @@
-import numpy as np
-# from skimage.transform import resize
-from .lib import deconvolution as dc, utils
-# import matplotlib.pyplot as plt
+# import numpy as np
+from skimage.transform import resize
+# from .lib import deconvolution as dc, utils
+import matplotlib.pyplot as plt
 
 
 # def pad_image(image, pad, mode="edge"):
