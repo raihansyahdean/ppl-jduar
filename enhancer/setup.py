@@ -31,7 +31,7 @@ def makeExtension(extName):
 
 extNames = str(os.getenv('SCAN_DIR'))
 if os.getenv('SCAN_DIR') is None:
-    extNames = scandir('enhancer\lib')
+    extNames = scandir('enhancer/lib')
 else:
     extNames = scandir(extNames)
 
