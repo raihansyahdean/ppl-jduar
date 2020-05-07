@@ -42,7 +42,7 @@ def build_pyramid(psf_size, lambd):
     return images, kernels
 
 
-@utils.timeit
+# @utils.timeit
 def deblur_module(pic, filename, dest_path, blur_width, confidence=10, tolerance=1, quality="normal", bits=8,
                   mask=None, display=True, blur="static", preview=False, p=1, order=2, norm=1, priority=0,
                   mask_size=255, iterations=200, refocus=False):
