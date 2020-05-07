@@ -1,11 +1,11 @@
 """
 Main module for image processing.
 """
-import os
 import base64
+import threading
 from io import BytesIO
 from PIL import Image
-from .compressor import compress
+import enhancer.compressor as comp
 
 COMPRESSED_DIR = "compressed_images/compressed_"
 
@@ -45,15 +45,27 @@ IDENTIFICATION_PAYLOAD_TEMPLATE = {
 
 IDENTIFICATION_IMAGE_NAME = "identify_image.jpg"
 
-def delete_image(image_file_dir):
+
+class ImageThread(threading.Thread):
     """
-    Function to delete an image from its directory.
+    Class for image threading (registration photo processing)
     """
-    try:
-        os.remove(image_file_dir)
-    except FileNotFoundError:
-        err_msg = "The file " + image_file_dir + " does not exist."
-        raise Exception(err_msg)
+    def __init__(self, filename, image_dir, thread_id):
+        threading.Thread.__init__(self)
+        self.filename = filename
+        self.image_dir = image_dir
+        self.thread_id = thread_id
+
+    def run(self):
+        blur_removed_dir = comp.apply_blur_removal(self.image_dir + self.filename, delete_old=True)
+
+        compress_dir = comp.compress(blur_removed_dir, delete_old=True)
+
+        # Creating Payload
+        compressed_data_str = image_to_data(compress_dir)
+        compressed_data_str = str(compressed_data_str)
+        REGIST_PAYLOAD_TEMPLATE["data"][self.thread_id]["image"] = compressed_data_str
+        comp.delete_image(compress_dir)
 
 def data_to_image(data, image_name):
     """
@@ -62,21 +74,19 @@ def data_to_image(data, image_name):
     img = Image.open(BytesIO(base64.b64decode(data)))
     img.save('images/' + image_name, 'JPEG')
 
+
 def image_to_data(image_file_dir):
     """
     Function to convert an image to a data image.
     Returns base64 string of image.
     """
-    try:
-        image = Image.open(image_file_dir)
-    except FileNotFoundError:
-        err_msg = "File " + image_file_dir + " not found."
-        raise Exception(err_msg)
+    image = comp.open_image(image_file_dir)
 
     buffered = BytesIO()
     image.save(buffered, format="JPEG")
     img_str = base64.b64encode(buffered.getvalue())
     return img_str
+
 
 def create_register_payload(datas):
     """
@@ -84,20 +94,24 @@ def create_register_payload(datas):
     Datas is an array with 5 original images in base64 format.
     Returns complete payload.
     """
+    threads = []
     if len(datas) != 5:
         err_msg = "Data length must be 5."
         raise Exception(err_msg)
 
     for i in range(5):
         data_to_image(datas[i], REGISTRATION_IMAGE_NAMES[i])
-        compress(IMAGE_DIR + REGISTRATION_IMAGE_NAMES[i])
-        delete_image(IMAGE_DIR + REGISTRATION_IMAGE_NAMES[i])
-        compressed_data_str = image_to_data(COMPRESSED_DIR + REGISTRATION_IMAGE_NAMES[i])
-        compressed_data_str = str(compressed_data_str)
-        REGIST_PAYLOAD_TEMPLATE["data"][i]["image"] = compressed_data_str
-        delete_image(COMPRESSED_DIR + REGISTRATION_IMAGE_NAMES[i])
+
+        # Multithreading to process faster
+        image_thread = ImageThread(REGISTRATION_IMAGE_NAMES[i], IMAGE_DIR, i)
+        image_thread.start()
+        threads.append(image_thread)
+
+    for thread in threads:
+        thread.join()
 
     return REGIST_PAYLOAD_TEMPLATE
+
 
 def create_identification_payload(image_str):
     """
@@ -107,11 +121,15 @@ def create_identification_payload(image_str):
     """
 
     data_to_image(image_str, IDENTIFICATION_IMAGE_NAME)
-    compress(IMAGE_DIR + IDENTIFICATION_IMAGE_NAME)
-    delete_image(IMAGE_DIR + IDENTIFICATION_IMAGE_NAME)
-    compressed_data_str = image_to_data(COMPRESSED_DIR + IDENTIFICATION_IMAGE_NAME)
+
+    blur_removed_dir = comp.apply_blur_removal(IMAGE_DIR + IDENTIFICATION_IMAGE_NAME, delete_old=True)
+
+    compress_dir = comp.compress(blur_removed_dir, delete_old=True)
+
+    # Creating Payload
+    compressed_data_str = image_to_data(compress_dir)
     compressed_data_str = str(compressed_data_str)
     IDENTIFICATION_PAYLOAD_TEMPLATE["image"] = compressed_data_str
-    delete_image(COMPRESSED_DIR + IDENTIFICATION_IMAGE_NAME)
+    comp.delete_image(compress_dir)
 
     return IDENTIFICATION_PAYLOAD_TEMPLATE
