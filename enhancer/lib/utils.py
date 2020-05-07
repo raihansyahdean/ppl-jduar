@@ -1,5 +1,5 @@
 import numpy as np
-import time
+# import time
 from .tifffile import imsave
 from os.path import join
 
@@ -21,17 +21,17 @@ def save(pic, name, dest_path):
     imsave(join(dest_path, name + ".jpg"), pic.astype(np.uint16), dtype=np.uint16, photometric='rgb')
 
 
-def timeit(method):
-    '''
-    From: http://www.samuelbosch.com/2012/02/timing-functions-in-python.html
-    '''
+# def timeit(method):
+#     '''
+#     From: http://www.samuelbosch.com/2012/02/timing-functions-in-python.html
+#     '''
 
-    def timed(*args, **kw):
-        ts = time.time()
-        result = method(*args, **kw)
-        te = time.time()
+#     def timed(*args, **kw):
+#         ts = time.time()
+#         result = method(*args, **kw)
+#         te = time.time()
 
-        print('%r %2.2f sec' % (method.__name__, te - ts))
-        return result
+#         print('%r %2.2f sec' % (method.__name__, te - ts))
+#         return result
 
-    return timed
+#     return timed
