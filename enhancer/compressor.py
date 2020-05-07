@@ -4,6 +4,7 @@ Main module for compression.
 import os
 from PIL import Image
 import enhancer.blur_detection as bd
+from .debluring import deblur_module
 
 BLUR_DIR = "blur_removed_images/"
 
@@ -51,5 +52,22 @@ def apply_blur_removal(image_file_dir, delete_old=True):
     Saves the image into a directory.
     Return is the image file directory of the new image.
     """
+
+    if bd.is_blurry(image_file_dir):
+        pic = open_image(image_file_dir)
+        image_name = image_file_dir.split("/")[-1]
+        deblur_module(pic, image_name, BLUR_DIR,
+                      3, display=False, tolerance=0.1,
+                      quality="normal",
+                      mask_size=pic.size[1] // 1.5, preview=False, p=1,
+                      blur="static", order=2, norm=1,
+                      priority=1, iterations=200)
+
+        # Generate the new directory and delete the old one
+        if delete_old:
+            delete_image(image_file_dir)
+
+        return BLUR_DIR + image_name
+
 
     return image_file_dir
