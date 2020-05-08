@@ -1,6 +1,6 @@
 import numpy as np
 from skimage.transform import resize
-from .lib import deconvolution as dc, utils
+# from .lib import deconvolution as dc, utils
 import matplotlib.pyplot as plt
 
 
