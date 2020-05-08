@@ -16,7 +16,6 @@ isort==4.3.21
 kiwisolver==1.2.0
 lazy-object-proxy==1.4.3
 matplotlib==3.2.1
-mod-wsgi==4.7.1
 numpy==1.18.4
 networkx==2.4
 opencv-python==4.2.0.34
