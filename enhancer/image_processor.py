@@ -98,7 +98,7 @@ def create_register_payload(datas):
 
     for i in range(5):
         data_to_image(datas[i], REGISTRATION_IMAGE_NAMES[i])
-       # Multithreading to process faster
+        # Multithreading to process faster
         image_thread = ImageThread(REGISTRATION_IMAGE_NAMES[i], IMAGE_DIR, i)
         image_thread.start()
         threads.append(image_thread)

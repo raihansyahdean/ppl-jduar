@@ -64,8 +64,8 @@ def apply_blur_removal(image_file_dir, delete_old=True):
         #               priority=1, iterations=200)
 
         # Generate the new directory and delete the old one
-        if delete_old:
-            delete_image(image_file_dir)
+        # if delete_old:
+        #     delete_image(image_file_dir)
 
         # return BLUR_DIR + image_name
         return image_file_dir
