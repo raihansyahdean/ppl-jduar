@@ -1,1 +1,1 @@
-web: gunicorn 'enhancer.lib:deconvolution'
+web: gunicorn smartcrm_backend.wsgi --log-file -
