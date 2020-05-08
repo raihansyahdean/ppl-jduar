@@ -67,7 +67,8 @@ def apply_blur_removal(image_file_dir, delete_old=True):
         if delete_old:
             delete_image(image_file_dir)
 
-        return BLUR_DIR + image_name
+        # return BLUR_DIR + image_name
+        return image_file_dir
 
 
     return image_file_dir
