@@ -159,27 +159,27 @@ class EnhancerTest(TestCase):
         test_img_dir = "images/BlurryDavid.jpg"
         self.assertTrue(blur.is_blurry(test_img_dir))
 
-    def test_apply_blur_removal_successfully(self):
-        """
-        Test when image is blurry will return deblur directory.
-        """
-        test_img_dir = "images/BlurryDavid.jpg"
-        deblur_dir = comp.apply_blur_removal(test_img_dir, delete_old=False)
-        self.assertEqual(deblur_dir, "blur_removed_images/BlurryDavid.jpg")
+    # def test_apply_blur_removal_successfully(self):
+    #     """
+    #     Test when image is blurry will return deblur directory.
+    #     """
+    #     test_img_dir = "images/BlurryDavid.jpg"
+    #     deblur_dir = comp.apply_blur_removal(test_img_dir, delete_old=False)
+    #     self.assertEqual(deblur_dir, "blur_removed_images/BlurryDavid.jpg")
 
-        comp.delete_image("blur_removed_images/BlurryDavid.jpg")
+    #     comp.delete_image("blur_removed_images/BlurryDavid.jpg")
 
-    def test_apply_blur_removal_success_with_delete(self):
-        """
-        Test when image is blurry will return deblur directory.
-        """
-        # Copy Original First
-        ori_dir = "images/BlurryDavid.jpg"
-        test_img_dir = "images/BlurryDavid_Copy.jpg"
-        img = comp.open_image(ori_dir)
-        img.save(test_img_dir, "JPEG")
+    # def test_apply_blur_removal_success_with_delete(self):
+    #     """
+    #     Test when image is blurry will return deblur directory.
+    #     """
+    #     # Copy Original First
+    #     ori_dir = "images/BlurryDavid.jpg"
+    #     test_img_dir = "images/BlurryDavid_Copy.jpg"
+    #     img = comp.open_image(ori_dir)
+    #     img.save(test_img_dir, "JPEG")
 
-        deblur_dir = comp.apply_blur_removal(test_img_dir, delete_old=True)
-        self.assertEqual(deblur_dir, "blur_removed_images/BlurryDavid_Copy.jpg")
+    #     deblur_dir = comp.apply_blur_removal(test_img_dir, delete_old=True)
+    #     self.assertEqual(deblur_dir, "blur_removed_images/BlurryDavid_Copy.jpg")
 
-        comp.delete_image("blur_removed_images/BlurryDavid_Copy.jpg")
+    #     comp.delete_image("blur_removed_images/BlurryDavid_Copy.jpg")

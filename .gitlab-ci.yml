@@ -22,27 +22,27 @@ stages:
 #    paths:
 #      - coverage.xml
 
-# pylint:
-#   image: python:3.6
-#   stage: test
-#   before_script:
-#     - pip install -r requirements.txt
-#     - pip install pylint pylint-exit
-#   script:
-#     - mkdir ./pylint
-#     - pylint --disable=W0702,C0301,R0904,E1101 --output-format=text crossroads/tests.py crossroads/views.py crossroads/validator.py enhancer/compressor.py enhancer/image_processor.py enhancer/blur_detection.py enhancer/tests.py | tee ./pylint/pylint.txt || pylint-exit $?
-#   artifacts:
-#     paths:
-#       - ./pylint/pylint.txt
+pylint:
+  image: python:3.6
+  stage: test
+  before_script:
+    - pip install -r requirements.txt
+    - pip install pylint pylint-exit
+  script:
+    - mkdir ./pylint
+    - pylint --disable=W0702,C0301,R0904,E1101 --output-format=text crossroads/tests.py crossroads/views.py crossroads/validator.py enhancer/compressor.py enhancer/image_processor.py enhancer/blur_detection.py enhancer/tests.py | tee ./pylint/pylint.txt || pylint-exit $?
+  artifacts:
+    paths:
+      - ./pylint/pylint.txt
 
-# SonarScanner:
-#   image: addianto/sonar-scanner-cli:latest
-#   stage: sonar
-#   script:
-#     - sonar-scanner
-#       -Dsonar.host.url=https://pmpl.cs.ui.ac.id/sonarqube
-#       -Dsonar.login=$SONARQUBE_TOKEN
-#       -Dsonar.branch.name=$CI_COMMIT_REF_NAME
+SonarScanner:
+  image: addianto/sonar-scanner-cli:latest
+  stage: sonar
+  script:
+    - sonar-scanner
+      -Dsonar.host.url=https://pmpl.cs.ui.ac.id/sonarqube
+      -Dsonar.login=$SONARQUBE_TOKEN
+      -Dsonar.branch.name=$CI_COMMIT_REF_NAME
 
 DeploymentStaging:
   image: ruby:2.4
