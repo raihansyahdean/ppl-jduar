@@ -54,8 +54,8 @@ def apply_blur_removal(image_file_dir, delete_old=True):
     """
 
     if bd.is_blurry(image_file_dir):
-        pic = open_image(image_file_dir)
-        image_name = image_file_dir.split("/")[-1]
+        # pic = open_image(image_file_dir)
+        # image_name = image_file_dir.split("/")[-1]
         # deb.deblur_module(pic, image_name, BLUR_DIR,
         #               3, display=False, tolerance=0.1,
         #               quality="normal",
