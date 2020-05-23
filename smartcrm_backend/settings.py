@@ -22,12 +22,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 1
 
 ALLOWED_HOSTS = [
     str(os.getenv('APP_HOST')),
     "127.0.0.1",
-    "localhost"
+    "localhost",
+    "0.0.0.0"
 ]
 
 # Application definition
