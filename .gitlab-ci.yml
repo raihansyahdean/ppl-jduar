@@ -22,6 +22,8 @@ build:
     - export WEB_IMAGE=$IMAGE:web
     - export NGINX_IMAGE=$IMAGE:nginx
   script:
+    - echo $CI_REGISTRY_USER
+    - echo $CI_JOB_TOKEN $CI_REGISTRY
     - apk add --no-cache bash
     - chmod +x ./setup_env.sh
     - bash ./setup_env.sh
