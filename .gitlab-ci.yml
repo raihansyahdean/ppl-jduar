@@ -27,13 +27,13 @@ build:
     - chmod +x ./setup_env.sh
     - bash ./setup_env.sh
     - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD $DOCKERHUB_REGISTRY
-    - docker pull $WEB_IMAGE || true
-    - docker pull $NGINX_IMAGE || true
+    - docker pull $DOCKERHUB_REGISTRY/$WEB_IMAGE || true
+    - docker pull $DOCKERHUB_REGISTRY/$NGINX_IMAGE || true
     - docker-compose build
-    - docker tag $WEB_IMAGE get-started/$WEB_IMAGE
-    - docker push $WEB_IMAGE
-    - docker tag $NGINX_IMAGE get-started/$NGINX_IMAGE
-    - docker push $NGINX_IMAGE
+    - docker tag $WEB_IMAGE $DOCKERHUB_REGISTRY/$WEB_IMAGE
+    - docker push $DOCKERHUB_REGISTRY/$WEB_IMAGE
+    - docker tag $NGINX_IMAGE $DOCKERHUB_REGISTRY/$NGINX_IMAGE
+    - docker push $DOCKERHUB_REGISTRY/$NGINX_IMAGE
 
 #UnitTest:
 #  image: python:3.6
