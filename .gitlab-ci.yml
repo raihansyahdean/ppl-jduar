@@ -97,7 +97,7 @@ DeploymentStaging:
     - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
     - chmod +x ./deploy.sh
-    - scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.prod.yml ec2-user@$EC2_PUBLIC_IP_ADDRESS:/home/ec2-user/smartcrm_backend
+    - scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.yml ec2-user@$EC2_PUBLIC_IP_ADDRESS:/home/ec2-user/smartcrm_backend
     - bash ./deploy.sh
   only:
     - staging
