@@ -77,16 +77,6 @@ SonarScanner:
       -Dsonar.branch.name=$CI_COMMIT_REF_NAME
 
 DeploymentStaging:
-  image:
-    name: docker/compose:1.25.4
-    entrypoint: [""]
-
-  services:
-    - docker:dind
-
-  variables:
-    DOCKER_DRIVER: overlay2
-
   stage: deploy
   before_script:
     - export WEB_IMAGE=jduar-nvidia-smart-crm_web:latest
