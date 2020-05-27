@@ -30,7 +30,9 @@ build:
     - docker pull $WEB_IMAGE || true
     - docker pull $NGINX_IMAGE || true
     - docker-compose build
+    - docker tag $WEB_IMAGE get-started/$WEB_IMAGE
     - docker push $WEB_IMAGE
+    - docker tag $NGINX_IMAGE get-started/$NGINX_IMAGE
     - docker push $NGINX_IMAGE
 
 #UnitTest:
