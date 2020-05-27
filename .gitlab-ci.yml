@@ -6,13 +6,14 @@ stages:
 
 build:
   image:
-    name: docker:latest
+    name: docker/compose:1.25.4
     entrypoint: [""]
 
   services:
     - docker:dind
 
   variables:
+#    DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
 
   stage: build
