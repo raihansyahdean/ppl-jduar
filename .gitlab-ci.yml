@@ -78,7 +78,7 @@ SonarScanner:
 
 DeploymentStaging:
   image:
-    name: docker:latest
+    name: docker/compose:1.25.4
     entrypoint: [""]
 
   services:
