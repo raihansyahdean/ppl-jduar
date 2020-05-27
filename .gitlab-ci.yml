@@ -20,19 +20,18 @@ build:
   before_script:
     - echo $CI_PROJECT_NAMESPACE
     - echo $CI_PROJECT_NAME
-    - export IMAGE=index.docker.io/rafiftaris/get-started
-    - export WEB_IMAGE=$IMAGE:web
-    - export NGINX_IMAGE=$IMAGE:nginx
+    - export WEB_IMAGE=jduar-nvidia-smart-crm_web:latest
+    - export NGINX_IMAGE=jduar-nvidia-smart-crm_nginx:latest
   script:
     - apk add --no-cache bash
     - chmod +x ./setup_env.sh
     - bash ./setup_env.sh
     - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD $DOCKERHUB_REGISTRY
-    - docker pull $IMAGE:web || true
-    - docker pull $IMAGE:nginx || true
+    - docker pull $WEB_IMAGE || true
+    - docker pull $NGINX_IMAGE || true
     - docker-compose build
-    - docker push $IMAGE:web
-    - docker push $IMAGE:nginx
+    - docker push $WEB_IMAGE
+    - docker push $NGINX_IMAGE
 
 #UnitTest:
 #  image: python:3.6
@@ -87,6 +86,9 @@ DeploymentStaging:
     DOCKER_DRIVER: overlay2
 
   stage: deploy
+  before_script:
+    - export WEB_IMAGE=jduar-nvidia-smart-crm_web:latest
+    - export NGINX_IMAGE=jduar-nvidia-smart-crm_nginx:latest
   script:
     - mkdir -p ~/.ssh
     - echo "$PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
