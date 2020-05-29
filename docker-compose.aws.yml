@@ -3,13 +3,13 @@ version: "3"
 
 services:
   web:
-    image: jduar-nvidia-smart-crm_web:latest
+    image: rafiftaris/jduar-nvidia-smart-crm_web:latest
     command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8000
     ports:
       - 8000:8000
     env_file: .env.staging
   nginx:
-    image: jduar-nvidia-smart-crm_nginx:latest
+    image: rafiftaris/jduar-nvidia-smart-crm_nginx:latest
     ports:
       - 80:80
     depends_on:
