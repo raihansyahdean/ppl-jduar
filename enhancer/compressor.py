@@ -7,6 +7,8 @@ import enhancer.blur_detection as bd
 import enhancer.debluring as deb
 
 BLUR_DIR = "blur_removed_images/"
+BLUR_REJECT = 50
+BLUR_THRESHOLD = 100
 
 def open_image(image_file_dir):
     """
@@ -53,7 +55,15 @@ def apply_blur_removal(image_file_dir, delete_old=True):
     Return is the image file directory of the new image.
     """
 
-    if bd.is_blurry(image_file_dir):
+    variance = bd.is_blurry(image_file_dir)
+
+    if variance < BLUR_REJECT:
+        # Reject Image
+        err_msg = "Bad Image Sent"
+        raise Exception(err_msg)
+
+    elif variance < BLUR_THRESHOLD:
+        # Enhance Image
         # pic = open_image(image_file_dir)
         # image_name = image_file_dir.split("/")[-1]
         # deb.deblur_module(pic, image_name, BLUR_DIR,

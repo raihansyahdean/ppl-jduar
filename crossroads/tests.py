@@ -194,6 +194,13 @@ INVALID_KEY_IDENTIFICATION_PASSCODE_PAYLOAD = {
     "password": "Grapes"
 }
 
+INVALID_BAD_IMAGE_REGIST_PAYLOAD_FROM_FE = {
+    "images": []
+}
+
+INVALID_BAD_IMAGE_IDENTIFICATION_PAYLOAD_FROM_FE = {
+    "image": ""
+}
 
 class CrossroadTest(TestCase):
     """
@@ -218,6 +225,19 @@ class CrossroadTest(TestCase):
             VALID_REGIST_PAYLOAD_FROM_FE["images"].append(img_str)
 
     @staticmethod
+    def set_bad_image_regist_payload_from_fe():
+        """
+        Function to set up the bad image regist payload
+        from FE: array of 5 images in bytes.
+        """
+        test_img_dir = "images/BlurryDavid.jpg"
+        img_str = processor.image_to_data(test_img_dir)
+        img_str = img_str.decode("utf-8")
+        img_str = "zzzzzzzzzzyyyyyyyyyyxxx" + img_str
+        for _ in range(5):
+            INVALID_BAD_IMAGE_REGIST_PAYLOAD_FROM_FE["images"].append(img_str)
+
+    @staticmethod
     def set_valid_identification_payload_from_fe():
         """
         Function to set up the valid identification payload
@@ -228,6 +248,18 @@ class CrossroadTest(TestCase):
         img_str = img_str.decode("utf-8")
         img_str = "zzzzzzzzzzyyyyyyyyyyxxx" + img_str
         VALID_IDENTIFICATION_PAYLOAD_FROM_FE["image"] = img_str
+
+    @staticmethod
+    def set_bad_image_identification_payload_from_fe():
+        """
+        Function to set up the bad image identification payload
+        from FE: 1 image in bytes.
+        """
+        test_img_dir = "images/BlurryDavid.jpg"
+        img_str = processor.image_to_data(test_img_dir)
+        img_str = img_str.decode("utf-8")
+        img_str = "zzzzzzzzzzyyyyyyyyyyxxx" + img_str
+        INVALID_BAD_IMAGE_IDENTIFICATION_PAYLOAD_FROM_FE["image"] = img_str
 
     # Register Validation Tests to XQ (dummy)
     def test_valid_regist_payload(self):
@@ -285,7 +317,7 @@ class CrossroadTest(TestCase):
         self.assertEqual(response.status_code, 500)
         self.assertEqual(data["message"], "Internal Server: Invalid Register Payload")
 
-    # Test Receive Requests from FE
+    # Test Receive Regist Requests from FE
     def test_bad_regist_request_from_fe(self):
         """
         Test invalid request.
@@ -299,6 +331,16 @@ class CrossroadTest(TestCase):
         """
         response = Client().post("/crossroads/regist/", \
                                  INVALID_REGIST_PAYLOAD_FROM_FE, content_type="application/json")
+        self.assertEqual(response.status_code, 500)
+
+    def test_invalid_regist_bad_image_from_fe(self):
+        """
+        Test when receive invalid bad image payload post from frontend.
+        """
+        self.set_bad_image_regist_payload_from_fe()
+
+        response = Client().post("/crossroads/regist/", \
+                                 INVALID_BAD_IMAGE_REGIST_PAYLOAD_FROM_FE, content_type="application/json")
         self.assertEqual(response.status_code, 500)
 
     def test_valid_regist_payload_from_fe(self):
@@ -407,6 +449,16 @@ class CrossroadTest(TestCase):
         """
         response = Client().post("/crossroads/identify/", \
                                  INVALID_IDENTIFICATION_PAYLOAD_FROM_FE, content_type="application/json")
+        self.assertEqual(response.status_code, 500)
+
+    def test_invalid_identification_bad_image_from_fe(self):
+        """
+        Test when receive invalid bad image payload post from frontend.
+        """
+        self.set_bad_image_identification_payload_from_fe()
+
+        response = Client().post("/crossroads/identify/", \
+                                 INVALID_BAD_IMAGE_IDENTIFICATION_PAYLOAD_FROM_FE, content_type="application/json")
         self.assertEqual(response.status_code, 500)
 
     def test_valid_identification_payload_from_fe(self):
