@@ -6,5 +6,5 @@ ssh -o StrictHostKeyChecking=no ec2-user@$EC2_PUBLIC_IP_ADDRESS << 'ENDSSH'
   docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD $DOCKERHUB_REGISTRY
   docker pull $DOCKERHUB_USER/$WEB_IMAGE
   docker pull $DOCKERHUB_USER/$NGINX_IMAGE
-  docker-compose up -d
+  docker-compose -f docker-compose.aws.yml up -d
 ENDSSH
