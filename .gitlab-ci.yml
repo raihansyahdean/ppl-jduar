@@ -78,9 +78,21 @@ SonarScanner:
 
 DeploymentStaging:
   stage: deploy
+  image:
+    name: docker:latest
+    entrypoint: [""]
+
+  services:
+    - docker:dind
+
+  variables:
+#    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+
   before_script:
     - export WEB_IMAGE=jduar-nvidia-smart-crm_web:latest
     - export NGINX_IMAGE=jduar-nvidia-smart-crm_nginx:latest
+    - apk update && apk add openssh
   script:
     - mkdir -p ~/.ssh
     - echo "$PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
@@ -92,7 +104,7 @@ DeploymentStaging:
     - scp  -o StrictHostKeyChecking=no -r ./.env.staging ./docker-compose.yml ec2-user@$EC2_PUBLIC_IP_ADDRESS:/home/ec2-user/smartcrm_backend
     - ls /bin
     - chmod +x ./deploy.sh
-    - bash ./deploy.sh
+    - ./deploy.sh
   only:
     - staging
 
