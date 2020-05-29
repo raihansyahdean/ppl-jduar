@@ -16,6 +16,10 @@ CREATE_REGIST_PAYLOAD_FAILED_RESPONSE = {
     "status_code": 500,
     "message": "Internal Server: Create Register Payload Failed"
 }
+CREATE_REGIST_PAYLOAD_BAD_IMAGE = {
+    "status_code": 500,
+    "message": "Bad Regist Image Sent: To Blurry"
+}
 INVALID_REGIST_PAYLOAD_RESPONSE = {
     "status_code": 500,
     "message": "Internal Server: Invalid Register Payload"
@@ -24,9 +28,14 @@ INVALID_REGIST_PASSCODE_PAYLOAD = {
     "status_code": 400,
     "message": "Invalid Register Passcode Payload"
 }
+
 CREATE_IDENTIFICATION_PAYLOAD_FAILED_RESPONSE = {
     "status_code": 500,
     "message": "Internal Server: Create Identification Payload Failed"
+}
+CREATE_IDENTIFICATION_PAYLOAD_BAD_IMAGE = {
+    "status_code": 500,
+    "message": "Bad Identify Image Sent: To Blurry"
 }
 INVALID_IDENTIFICATION_PAYLOAD_RESPONSE = {
     "status_code": 500,
@@ -40,7 +49,6 @@ INVALID_IDENTIFY_PASSCODE_PAYLOAD = {
     "status_code": 400,
     "message": "Invalid Identify Passcode Payload"
 }
-
 
 
 @csrf_exempt
@@ -59,7 +67,13 @@ def receive_regist_photos(request):
             images.append(i[23:])
         try:
             ready_payload = processor.create_register_payload(images)
-        except:
+        except Exception as exc:
+            print("[REGIST_PHOTOS_RECEIVE] " + str(exc))
+            if str(exc) == "Bad Image Sent":
+                print("BAD_REGIST_IMAGE")
+                return JsonResponse(json.loads(
+                    json.dumps(CREATE_REGIST_PAYLOAD_FAILED_RESPONSE)), status=500)
+
             return JsonResponse(json.loads(
                 json.dumps(CREATE_REGIST_PAYLOAD_FAILED_RESPONSE)), status=500)
 
@@ -76,7 +90,8 @@ def send_regist_photos(request, request_payload):
     """
     try:
         validator.validate_regist_payload(request_payload)
-    except:
+    except Exception as exc:
+        print("[REGIST_PHOTOS_SEND] " + str(exc))
         return JsonResponse(json.loads(json.dumps(INVALID_REGIST_PAYLOAD_RESPONSE)), status=500)
 
     csrf_token = django.middleware.csrf.get_token(request)
@@ -103,7 +118,13 @@ def receive_identification_photo(request):
         image = regist_payload['image'][23:]
         try:
             ready_payload = processor.create_identification_payload(image)
-        except:
+        except Exception as exc:
+            print("[IDENT_PHOTOS_RECEIVE] " + str(exc))
+            if str(exc) == "Bad Image Sent":
+                print("BAD_IDENTIFICATION_IMAGE")
+                return JsonResponse(json.loads(
+                    json.dumps(CREATE_IDENTIFICATION_PAYLOAD_BAD_IMAGE)), status=500)
+
             return JsonResponse(json.loads(
                 json.dumps(CREATE_IDENTIFICATION_PAYLOAD_FAILED_RESPONSE)), status=500)
 
@@ -119,7 +140,8 @@ def send_identification_photo(request, request_payload):
     """
     try:
         validator.validate_identification_payload(request_payload)
-    except:
+    except Exception as exc:
+        print("[IDENT_PHOTOS_SEND] " + str(exc))
         return JsonResponse(json.loads(json.dumps(INVALID_IDENTIFICATION_PAYLOAD_RESPONSE)), status=500)
 
     csrf_token = django.middleware.csrf.get_token(request)
@@ -145,7 +167,8 @@ def receive_regist_passcode(request):
 
         try:
             validator.validate_regist_passcode_payload(regist_passcode_payload)
-        except:
+        except Exception as exc:
+            print("[REGIST_PASS_RECEIVE] " + str(exc))
             return JsonResponse(json.loads(json.dumps(INVALID_REGIST_PASSCODE_PAYLOAD)), status=400)
 
         csrf_token = django.middleware.csrf.get_token(request)
@@ -173,7 +196,8 @@ def receive_identification_passcode(request):
 
         try:
             validator.validate_identification_passcode_payload(identify_passcode_payload)
-        except:
+        except Exception as exc:
+            print("[IDENT_PASS_RECEIVE] " + str(exc))
             return JsonResponse(json.loads(json.dumps(INVALID_IDENTIFY_PASSCODE_PAYLOAD)), status=400)
 
         csrf_token = django.middleware.csrf.get_token(request)

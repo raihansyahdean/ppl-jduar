@@ -136,7 +136,7 @@ class EnhancerTest(TestCase):
         """
         Test when payload will be created correctly.
         """
-        test_img_dir = "images/BlurryDavid.jpg"
+        test_img_dir = "images/SharpHouse.jpg"
         data_str = processor.image_to_data(test_img_dir)
 
         payload = processor.create_identification_payload(data_str)
@@ -150,14 +150,14 @@ class EnhancerTest(TestCase):
         Test when image is sharp.
         """
         test_img_dir = "images/SharpHouse.jpg"
-        self.assertFalse(blur.is_blurry(test_img_dir))
+        self.assertFalse(blur.is_blurry(test_img_dir) < 100)
 
     def test_image_is_blurry(self):
         """
         Test when image is blurry.
         """
         test_img_dir = "images/BlurryDavid.jpg"
-        self.assertTrue(blur.is_blurry(test_img_dir))
+        self.assertTrue(blur.is_blurry(test_img_dir) < 100)
 
     # def test_apply_blur_removal_successfully(self):
     #     """

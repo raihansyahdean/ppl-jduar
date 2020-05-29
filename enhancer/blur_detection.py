@@ -5,9 +5,6 @@ Source: https://github.com/indyka/blur-detection
 # import the necessary packages
 import cv2
 
-BLUR_THRESHOLD = 100
-
-
 def variance_of_laplacian(image):
     """
         Calculate the variance of laplacian from image matrix
@@ -28,7 +25,5 @@ def is_blurry(image_directory):
     image = cv2.imread(image_directory)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     variance = variance_of_laplacian(gray)
-    print(variance)
-    if variance >= BLUR_THRESHOLD:
-        return False
-    return True
+    print("[BLUR_VARIANCE] " + str(variance))
+    return variance
