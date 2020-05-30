@@ -2,6 +2,7 @@
 Main module for image processing.
 """
 import base64
+import ctypes 
 import threading
 from io import BytesIO
 from PIL import Image
@@ -45,6 +46,8 @@ IDENTIFICATION_PAYLOAD_TEMPLATE = {
 
 IDENTIFICATION_IMAGE_NAME = "identify_image.jpg"
 
+BAD_IMAGE_FLAG = False
+
 class ImageThread(threading.Thread):
     """
     Class for image threading (registration photo processing)
@@ -54,9 +57,14 @@ class ImageThread(threading.Thread):
         self.filename = filename
         self.image_dir = image_dir
         self.thread_id = thread_id
+        self.BAD_IMAGE_FLAG = False
 
     def run(self):
-        blur_removed_dir = comp.apply_blur_removal(self.image_dir + self.filename, delete_old=True)
+        try:
+            blur_removed_dir = comp.apply_blur_removal(self.image_dir + self.filename, delete_old=True)
+        except:
+            # Reject Image
+            self.raise_exception()
 
         compress_dir = comp.compress(blur_removed_dir, delete_old=True)
 
@@ -65,6 +73,23 @@ class ImageThread(threading.Thread):
         compressed_data_str = str(compressed_data_str)
         REGIST_PAYLOAD_TEMPLATE["data"][self.thread_id]["image"] = compressed_data_str
         comp.delete_image(compress_dir)
+    
+    def get_id(self): 
+        # returns id of the respective thread 
+        if hasattr(self, '_thread_id'): 
+            return self._thread_id 
+        for id, thread in threading._active.items(): 
+            if thread is self: 
+                return id
+
+    def raise_exception(self):
+        self.BAD_IMAGE_FLAG = True
+        thread_id = self.get_id()
+        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id,
+                                                         ctypes.py_object(SystemExit))
+        if res > 1:
+            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
+            print('Exception raise failure')
 
 def data_to_image(data, image_name):
     """
@@ -91,6 +116,7 @@ def create_register_payload(datas):
     Datas is an array with 5 original images in base64 format.
     Returns complete payload.
     """
+    BAD_IMAGE_FLAG = False
     threads = []
     if len(datas) != 5:
         err_msg = "Data length must be 5."
@@ -106,6 +132,14 @@ def create_register_payload(datas):
     for thread in threads:
         thread.join()
 
+    BAD_IMAGE_FLAG = threads[0].BAD_IMAGE_FLAG
+
+    if BAD_IMAGE_FLAG:
+        # Bad Image Sent
+        BAD_IMAGE_FLAG = False
+        err_msg = "Bad Image Sent"
+        raise Exception(err_msg)
+
     return REGIST_PAYLOAD_TEMPLATE
 
 def create_identification_payload(image_str):
@@ -116,7 +150,12 @@ def create_identification_payload(image_str):
     """
 
     data_to_image(image_str, IDENTIFICATION_IMAGE_NAME)
-    blur_removed_dir = comp.apply_blur_removal(IMAGE_DIR + IDENTIFICATION_IMAGE_NAME, delete_old=True)
+    try:
+        blur_removed_dir = comp.apply_blur_removal(IMAGE_DIR + IDENTIFICATION_IMAGE_NAME, delete_old=True)
+    except:
+        # Reject Image
+        err_msg = "Bad Image Sent"
+        raise Exception(err_msg)
 
     compress_dir = comp.compress(blur_removed_dir, delete_old=True)
 
