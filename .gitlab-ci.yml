@@ -23,6 +23,7 @@ build:
     - export WEB_IMAGE=jduar-nvidia-smart-crm_web:latest
     - export NGINX_IMAGE=jduar-nvidia-smart-crm_nginx:latest
   script:
+    - pwd
     - apk add --no-cache bash
     - chmod +x ./setup_env.sh
     - bash ./setup_env.sh
@@ -101,7 +102,7 @@ DeploymentStaging:
     - eval "$(ssh-agent -s)"
     - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
-    - scp  -o StrictHostKeyChecking=no -r ./ ec2-user@$EC2_PUBLIC_IP_ADDRESS:/home/ec2-user/smartcrm_backend
+    - scp  -o StrictHostKeyChecking=no -r ./.env.staging ./docker-compose.aws.yml ec2-user@$EC2_PUBLIC_IP_ADDRESS:/home/ec2-user/smartcrm_backend
     - chmod +x ./deploy.sh
     - ./deploy.sh
   only:
