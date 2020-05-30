@@ -6,7 +6,7 @@ services:
     image: rafiftaris/jduar-nvidia-smart-crm_web:latest
     stdin_open: true
     tty: true
-    command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn smartcrm_backend.wsgi:application --bind 0.0.0.0:8000
     ports:
       - 8000:8000
     env_file: .env.staging
