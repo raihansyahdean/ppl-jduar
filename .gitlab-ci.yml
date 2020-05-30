@@ -101,7 +101,7 @@ DeploymentStaging:
     - eval "$(ssh-agent -s)"
     - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
-    - scp  -o StrictHostKeyChecking=no -r ./.env.staging ./docker-compose.aws.yml ec2-user@$EC2_PUBLIC_IP_ADDRESS:/home/ec2-user/smartcrm_backend
+    - scp  -o StrictHostKeyChecking=no -r . ec2-user@$EC2_PUBLIC_IP_ADDRESS:/home/ec2-user/smartcrm_backend
     - chmod +x ./deploy.sh
     - ./deploy.sh
   only:
