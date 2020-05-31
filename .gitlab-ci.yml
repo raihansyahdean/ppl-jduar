@@ -76,6 +76,23 @@ SonarScanner:
       -Dsonar.login=$SONARQUBE_TOKEN
       -Dsonar.branch.name=$CI_COMMIT_REF_NAME
 
+DeploymentHeroku:
+  image: ruby:2.4
+  stage: deploy
+  before_script:
+    - gem install dpl
+    - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+  script:
+    - echo "SECRET_KEY=$SECRET_KEY" > .env
+    - dpl --provider=heroku --app=$HEROKU_APPNAME --api-key=$HEROKU_APIKEY
+    - export HEROKU_API_KEY=$HEROKU_APIKEY
+    - heroku run --app $HEROKU_APPNAME migrate
+  environment:
+    name: staging
+    url: $HEROKU_APP_HOST
+  only:
+    - heroku
+
 DeploymentStaging:
   stage: deploy
   image:
