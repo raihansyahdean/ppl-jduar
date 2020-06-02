@@ -66,6 +66,7 @@ class ImageThread(threading.Thread):
         except:
             # Reject Image
             self.raise_exception()
+            return
 
         compress_dir = comp.compress(blur_removed_dir, delete_old=True)
 
@@ -117,7 +118,7 @@ def create_register_payload(datas):
     Datas is an array with 5 original images in base64 format.
     Returns complete payload.
     """
-    BAD_IMAGE_FLAG = False
+    bad_image_flag = False
     threads = []
     if len(datas) != 5:
         err_msg = "Data length must be 5."
@@ -132,12 +133,12 @@ def create_register_payload(datas):
 
     for thread in threads:
         thread.join()
+        if thread.BAD_IMAGE_FLAG:
+            bad_image_flag = True
 
-    BAD_IMAGE_FLAG = threads[0].BAD_IMAGE_FLAG
-
-    if BAD_IMAGE_FLAG:
+    if bad_image_flag:
         # Bad Image Sent
-        BAD_IMAGE_FLAG = False
+        bad_image_flag = False
         err_msg = "Bad Image Sent"
         raise Exception(err_msg)
 
