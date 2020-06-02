@@ -60,6 +60,7 @@ class ImageThread(threading.Thread):
         self.BAD_IMAGE_FLAG = False
 
     def run(self):
+        blur_removed_dir = ""
         try:
             blur_removed_dir = comp.apply_blur_removal(self.image_dir + self.filename, delete_old=True)
         except:
