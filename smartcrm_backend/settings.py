@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'hello',
     'crossroads',
+    'cashier',
 ]
 
 MIDDLEWARE = [
