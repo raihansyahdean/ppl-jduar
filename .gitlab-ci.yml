@@ -48,7 +48,7 @@ build:
 #  when: on_success
 #  script:
 #    - echo "SECRET_KEY=$SECRET_KEY" > .env
-#    - coverage run --include='hello/*,crossroads/*,enhancer/*' --omit='*/tests.py,enhancer/debluring.py,enhancer/setup.py,enhancer/lib/*,build/*' manage.py test && coverage report -m && coverage xml
+#    - coverage run --include='cashier/*,hello/*,crossroads/*,enhancer/*' --omit='*/tests.py,enhancer/debluring.py,enhancer/setup.py,enhancer/lib/*,build/*' manage.py test && coverage report -m && coverage xml
 #
 #  artifacts:
 #    paths:
