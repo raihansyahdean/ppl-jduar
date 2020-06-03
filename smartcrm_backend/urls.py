@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import include, path
 import hello.urls as hello
 import crossroads.urls as crossroads
+import cashier.urls as cashier
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/',include(hello)),
-    path('crossroads/',include(crossroads))
+    path('crossroads/',include(crossroads)),
+    path('cashier/', include(cashier))
 ]
