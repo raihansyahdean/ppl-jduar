@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'hello',
     'crossroads',
+    'cashier',
 ]
 
 MIDDLEWARE = [
@@ -81,8 +82,15 @@ WSGI_APPLICATION = 'smartcrm_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, '../../db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'OPTIONS': {
+            'options': '-c search_path=smart_crm'
+        },
+        'NAME': 'pivismartrtl_1',
+        'USER': 'pivismrtl',
+        'PASSWORD': 'pivismrtl@!23',
+        'HOST': 'pivisiondb.czqo3tlguncc.ap-southeast-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
